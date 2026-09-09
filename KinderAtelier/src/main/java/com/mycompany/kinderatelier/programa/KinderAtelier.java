@@ -3,7 +3,6 @@
  */
 
 package com.mycompany.kinderatelier.programa;
-
 /**
  *
  * @author Ángela
@@ -319,5 +318,14 @@ public class KinderAtelier {
         if (matricula == null) {
             return "No existe la matricula numero " + numero + "\n";
         }return matricula.generarConstancia(nombre, nit);
+    }
+    public String generarMatriculaPdf(int numero) {
+        Matricula matricula;
+        matricula = buscarMatricula(numero);
+        if (matricula == null) {
+            return "No existe la matricula numero " + numero + "\n";
+        } else {
+            return matricula.generarMatriculaPdf(nombre,nit);
+        }
     }
 }

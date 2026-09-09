@@ -58,6 +58,12 @@ public class Estudiante extends Persona {
     public String getDocumentoAcudiente() {
         return documentoAcudiente;
     }
+    public String getAlergias(){
+        return alergias;
+    }
+    public String getADireccion(){
+        return direccion;
+    }
     public int calcularEdad() {
         int anioNacimiento;
         int edad;

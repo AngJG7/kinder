@@ -5,7 +5,9 @@
 package com.mycompany.kinderatelier.programa;
 
 import com.mycompany.kinderatelier.lectura.Lector;
-
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.FileOutputStream;
 
 /*Para mi programa, la función de matricula requería de la condición que no podía ser un profesor quien matriculase
 entonces construí bastante de las otras funciones para que la matricula me quedase completa */
@@ -45,6 +47,8 @@ public class Principal {
                 consultarEstudiante(kinder);
             } else if (opcion == 10) {
                 consultarConstancia(kinder);
+            } else if (opcion == 11) {
+                consultarMatriculaPdf(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -67,6 +71,7 @@ public class Principal {
                 8. Ver estudiantes de un taller
                 9. Consultar un estudiante
                10. Generar constancia
+               11. Consultar Matricula PDF
                 0. Salir
  
                Digite una opcion:""";
@@ -298,6 +303,17 @@ public class Principal {
         }
  
         return KinderAtelier.RAMAS[eleccion - 1];
+    }
+    public static void consultarMatriculaPdf(KinderAtelier kinder){
+        int numero;
+        numero = Lector.leerEntero("Numero de la matricula:");
+        Lector.mostrar(kinder.generarMatriculaPdf(numero));
+        try {
+            Runtime.getRuntime().exec("cmd /c start matricula.pdf");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        
     }
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;
