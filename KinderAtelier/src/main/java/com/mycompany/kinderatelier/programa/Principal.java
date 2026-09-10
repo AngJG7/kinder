@@ -49,6 +49,8 @@ public class Principal {
                 consultarConstancia(kinder);
             } else if (opcion == 11) {
                 consultarMatriculaPdf(kinder);
+            } else if (opcion == 12){
+                
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -314,6 +316,17 @@ public class Principal {
             e.printStackTrace();
         }
         
+    }
+    
+    public void consultar10Mejores(KinderAtelier kinder) {
+        //Llamo a un funcion del kinder para ordenar un arreglo con los 10 mejores estudiantes
+        Estudiante[] arr = kinder.mejores10();
+        // Creo una variable de tipo texto que va a contener todo el reporte
+        String texto = "";
+        for (int i = 0;i<arr.length;i++){
+            texto += "1. "+arr[i].getNombreCompleto()+"Edad: "+arr[i].calcularEdad()+"Promedio: "+arr[i].calcularPromedio()+"\n";
+        }
+        Lector.mostrar(texto);
     }
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;

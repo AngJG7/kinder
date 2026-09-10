@@ -179,7 +179,7 @@ public class Matricula {
             
             font = FontFactory.getFont(BaseFont.TIMES_ITALIC,12,BaseColor.BLACK);
             
-            Paragraph info = new Paragraph("Nombre: "+estudiante.getNombreCompleto()+"\nFecha de Nacimiento: "+estudiante.getFechaNacimiento()+"\nTipo de sangre: "+estudiante.getTipoSangre()+"\nAlergias: "+estudiante.getAlergias()+"\nHabilidades: "+estudiante.getHabilidades()+"\nDirección: "+estudiante.getADireccion(),font);
+            Paragraph info = new Paragraph("Nombre: "+estudiante.getNombreCompleto()+"\nFecha de Nacimiento: "+estudiante.getFechaNacimiento()+"\nTipo de sangre: "+estudiante.getTipoSangre()+"\nAlergias: "+estudiante.getAlergias()+"\nHabilidades: "+estudiante.getHabilidades()+"\nDirección: "+estudiante.getDireccion(),font);
             doc.add(info);
             
             

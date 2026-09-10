@@ -328,4 +328,9 @@ public class KinderAtelier {
             return matricula.generarMatriculaPdf(nombre,nit);
         }
     }
+    public Estudiante[] mejores10(){
+        //Esta función recorre todo el arreglo de estudiantes y los ordena de mejor a menos mejor y retorna el arreglo :)
+        Estudiante[] mejores10 = null;
+        return mejores10;
+    }
 }
