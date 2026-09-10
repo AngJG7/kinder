@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.kinderatelier.programa;
-
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.FileOutputStream;
 /**
  *
  * @author Ángela
@@ -157,6 +159,36 @@ public class Matricula {
                              estudiante.getDocumento(), fecha,
                              anioLectivo, listarRamas(), valor, estado,
                              estudiante.getTelefonoAcudiente());
+    }
+    
+    public String generarMatriculaPdf(String nombreKinder, String nitKinder){
+        try {
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("matricula.pdf"));
+            doc.open();
+            
+            
+            Font font = FontFactory.getFont(BaseFont.TIMES_BOLD, 21, BaseColor.BLACK);
+            
+            
+            Paragraph titulo = new Paragraph("Constancia Matricula "+estudiante.getDocumento(),font);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            doc.add(titulo);
+            
+            doc.add(new Paragraph("\n\n"));
+            
+            font = FontFactory.getFont(BaseFont.TIMES_ITALIC,12,BaseColor.BLACK);
+            
+            Paragraph info = new Paragraph("Nombre: "+estudiante.getNombreCompleto()+"\nFecha de Nacimiento: "+estudiante.getFechaNacimiento()+"\nTipo de sangre: "+estudiante.getTipoSangre()+"\nAlergias: "+estudiante.getAlergias()+"\nHabilidades: "+estudiante.getHabilidades()+"\nDirección: "+estudiante.getADireccion(),font);
+            doc.add(info);
+            
+            
+            doc.close();
+            
+        } catch (DocumentException | java.io.FileNotFoundException e){
+            e.printStackTrace();
+        }
+        return "Cargando el documento...";
     }
     
 }
