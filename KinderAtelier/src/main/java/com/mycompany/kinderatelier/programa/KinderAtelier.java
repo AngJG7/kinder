@@ -3,12 +3,17 @@
  */
 
 package com.mycompany.kinderatelier.programa;
+import com.mycompany.kinderatelier.lectura.Lector;
 import java.util.Arrays;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.FileOutputStream;
 /**
  *
  * @author Ángela
  */
 public class KinderAtelier {
+    public static final int VALOR_DESCUENTO_MATRICULA = 250000;
     public static final int ANIO_LECTIVO = 2026;
     public static final int EDAD_MINIMA = 4;
     public static final int EDAD_MAXIMA = 5;
@@ -37,6 +42,7 @@ public class KinderAtelier {
     private int cantidadMatriculas;
     private int consecutivo;
     private String ultimoMensaje;
+    private Estudiante[] mejores10;
     public KinderAtelier(String dNombre, String dNit, String dFechaActual) {
         nombre = dNombre;
         nit = dNit;
@@ -45,12 +51,14 @@ public class KinderAtelier {
         estudiantes = new Estudiante[MAX_REGISTROS];
         empleados = new Empleado[MAX_REGISTROS];
         matriculas = new Matricula[MAX_REGISTROS];
-
+        mejores10 = new Estudiante[10];
+        
         cantidadEstudiantes = 0;
         cantidadEmpleados = 0;
         cantidadMatriculas = 0;
         consecutivo = 1;
         ultimoMensaje = "";
+        
     }
 
     public String getNombre() {
@@ -339,22 +347,195 @@ public class KinderAtelier {
             return matricula.generarMatriculaPdf(nombre,nit);
         }
     }
-    public Estudiante[] mejores10(){
-        //Esta función hace un copia de todo el arreglo, los ordena por desempeño y devuelve un arreglo con los primeros 10
-        Estudiante[] mejores10 = Arrays.copyOf(estudiantes, estudiantes.length);
-        for (int i = 0;i<mejores10.length-1;i++){
-            for (int j = 0;j<mejores10.length-1-i;i++){
-                if (mejores10[j].calcularPromedio()<mejores10[j+1].calcularPromedio()){
-                    Estudiante aux = mejores10[j];
-                    mejores10[j] = mejores10[j+1];
-                    mejores10[j+1] = aux; 
+
+   
+
+    /**
+     * Devuelve el listado de los mejores estudiantes (hasta 10) ordenados
+     * de mayor a menor promedio. Solo considera estudiantes que ya tienen
+     * las MAX_NOTAS notas registradas (promedio distinto de -1).
+     * Esta función SOLO consulta y ordena: no aplica descuentos ni bonos.
+     */
+    public Estudiante[] mejores10() {
+        // Copia solo las posiciones realmente usadas del arreglo
+        Estudiante[] candidatos = Arrays.copyOf(estudiantes, cantidadEstudiantes);
+
+        // Bubble sort descendente por promedio
+        for (int i = 0; i < candidatos.length - 1; i++) {
+            for (int j = 0; j < candidatos.length - 1 - i; j++) {
+                if (candidatos[j].calcularPromedio() < candidatos[j + 1].calcularPromedio()) {
+                    Estudiante aux = candidatos[j];
+                    candidatos[j] = candidatos[j + 1];
+                    candidatos[j + 1] = aux;
                 }
             }
         }
-        if(cantidadEstudiantes > 10){
-            return Arrays.copyOfRange(mejores10,0,11);
-        } else{
-            return Arrays.copyOfRange(mejores10,0,cantidadEstudiantes);
+
+        int cantidadFinal = Math.min(10, candidatos.length);
+        return Arrays.copyOfRange(candidatos, 0, cantidadFinal);
+    }
+
+    /**
+     * Aplica el beneficio (descuento en matricula si se cobra matricula,
+     * o reconocimiento en bono comercial si no se cobra) a los estudiantes
+     * que estan en el listado de mejores10(). Es una accion explicita,
+     * separada de la consulta, para no reaplicar el beneficio cada vez
+     * que alguien solo quiere VER el listado.
+     */
+    public void aplicarDescuentoMejores10() {
+        Estudiante[] mejores = mejores10();
+
+        for (int k = 0; k < cantidadMatriculas; k++) {
+            Matricula matricula = matriculas[k];
+
+            if (matricula != null && matricula.estaActiva()) {
+                boolean esTop10 = false;
+
+                // Verificamos si el estudiante de esta matricula pertenece al Top 10
+                for (Estudiante e : mejores) {
+                    if (e != null && e.getDocumento().equals(matricula.getEstudiante().getDocumento())) {
+                        esTop10 = true;
+                        break;
+                    }
+                }
+
+                if (esTop10) {
+                    matricula.setValor(VALOR_MATRICULA - VALOR_DESCUENTO_MATRICULA);
+                    Lector.mostrar("Descuento aplicado/mantenido para: " + matricula.getEstudiante().getNombreCompleto());
+                } else {
+                    // Si salio del Top 10 o no pertenece, se restablece la tarifa plena
+                    matricula.setValor(VALOR_MATRICULA);
+                }
+            }
         }
+    }
+
+    /**
+     * Genera el reporte PDF con el listado de los mejores estudiantes,
+     * siguiendo el mismo patron usado en Matricula.generarMatriculaPdf.
+     */
+    public String generarMejores10Pdf() {
+        Estudiante[] mejores = mejores10();
+        String nombreArchivo = "mejores10.pdf";
+        try {
+            Document doc = new Document(PageSize.A4, 50, 50, 50, 50);
+            PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
+            doc.open();
+
+            // 1. Colores y fuentes corporativas
+            BaseColor azulOscuro = new BaseColor(30, 81, 123);
+            BaseColor grisTexto = new BaseColor(60, 60, 60);
+
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
+            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
+            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, azulOscuro);
+            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, grisTexto);
+            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, grisTexto);
+            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.GRAY);
+
+            // 2. Encabezado de la Institución
+            Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
+            pKinder.setAlignment(Element.ALIGN_CENTER);
+            doc.add(pKinder);
+
+            Paragraph pNit = new Paragraph("NIT: " + nit, fontSubHeader);
+            pNit.setAlignment(Element.ALIGN_CENTER);
+            pNit.setSpacingAfter(10);
+            doc.add(pNit);
+
+            // Línea divisoria
+            Paragraph linea = new Paragraph("________________________________________________________________________", fontSubHeader);
+            linea.setAlignment(Element.ALIGN_CENTER);
+            linea.setSpacingAfter(15);
+            doc.add(linea);
+
+            // 3. Título Principal
+            Paragraph pTitulo = new Paragraph("CUADRO DE HONOR - 10 MEJORES ESTUDIANTES", fontTitulo);
+            pTitulo.setAlignment(Element.ALIGN_CENTER);
+            pTitulo.setSpacingAfter(20);
+            doc.add(pTitulo);
+
+            // 4. Listado de Estudiantes
+            if (mejores.length == 0) {
+                Paragraph pVacio = new Paragraph("No hay estudiantes registrados o con notas disponibles.", fontNormal);
+                pVacio.setAlignment(Element.ALIGN_CENTER);
+                doc.add(pVacio);
+            } else {
+                for (int i = 0; i < mejores.length; i++) {
+                    Estudiante e = mejores[i];
+                    if (e == null) continue;
+
+                    double promedio = e.calcularPromedio();
+                    String strPromedio = (promedio == -1.0) ? "Pendiente (menos de 5 notas)" : String.format("%.2f", promedio);
+
+                    Paragraph pItem = new Paragraph();
+                    pItem.setLeading(16f);
+
+                    // Número de posición y Nombre Completo
+                    pItem.add(new Chunk((i + 1) + ". ", fontSeccion));
+                    pItem.add(new Chunk(e.getNombreCompleto(), fontBold));
+                    pItem.add(new Chunk(" (Doc. " + e.getDocumento() + ")\n", fontNormal));
+
+                    // Promedio obtenido
+                    pItem.add(new Chunk("    Promedio Académico: ", fontBold));
+                    pItem.add(new Chunk(strPromedio + "\n", fontNormal));
+
+                    pItem.setSpacingAfter(10);
+                    doc.add(pItem);
+                }
+            }
+
+            // 5. Pie de página
+            Paragraph pie = new Paragraph(
+                "Reporte de excelencia académica generado automáticamente por " + nombre + ".",
+                fontPie
+            );
+            pie.setSpacingBefore(15);
+            pie.setAlignment(Element.ALIGN_CENTER);
+            doc.add(pie);
+
+            doc.close();
+            return "Reporte de mejores estudiantes generado exitosamente.\n";
+
+        } catch (DocumentException | java.io.FileNotFoundException e) {
+            e.printStackTrace();
+            return "Error generando el reporte de mejores estudiantes.\n";
+        }
+    }
+    public String generarMejores10Texto() {
+        Estudiante[] mejores = mejores10();
+        if (mejores == null || mejores.length == 0) {
+            return "No hay estudiantes registrados en el sistema.\n";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("================================================\n");
+        sb.append("   MEJORES 10 ESTUDIANTES - ").append(nombre).append("\n");
+        sb.append("================================================\n\n");
+
+        boolean hayDatos = false;
+        for (int i = 0; i < mejores.length; i++) {
+            Estudiante e = mejores[i];
+            if (e != null) {
+                hayDatos = true;
+                double promedio = e.calcularPromedio();
+                String promTexto = (promedio == -1.0) 
+                        ? "Pendiente (menos de 5 notas)" 
+                        : String.format("%.2f", promedio);
+
+                sb.append(i + 1).append(". ")
+                  .append(e.getNombreCompleto())
+                  .append(" (Doc: ").append(e.getDocumento()).append(")")
+                  .append(" | Edad: ").append(e.calcularEdad()).append(" años")
+                  .append(" | Promedio: ").append(promTexto)
+                  .append("\n");
+            }
+        }
+
+        if (!hayDatos) {
+            return "No hay datos de estudiantes disponibles para mostrar.\n";
+        }
+        return sb.toString();
     }
 }

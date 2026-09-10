@@ -36,19 +36,21 @@ public class Lector {
     }
     public static float leerFloat(String mensaje) {
         String ingreso;
-        float numero;
-        boolean valido;
-        numero = 0;
-        valido = false;
+        float numero = 0;
+        boolean valido = false;
         while (!valido) {
             ingreso = leerTexto(mensaje);
-            if (esNumeroFloat(ingreso)) {
+            if (ingreso.isEmpty()) {
+                return -1; // Permite cancelar la operacion
+            }
+            try {
                 numero = Float.parseFloat(ingreso);
                 valido = true;
-            } else {
-                mostrar("Dato invalido. Escriba un numero entero.");
+            } catch (NumberFormatException e) {
+                mostrar("Dato invalido. Escriba un numero decimal (ejemplo: 4.5).");
             }
-        }return numero;
+        }
+        return numero;
     }
     public static void mostrar(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "",
