@@ -4,13 +4,16 @@
  */
 package com.mycompany.kinderatelier.programa;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Ángela
  */
 public class Estudiante extends Persona {
-    
+
     private static final int ANIO_ACTUAL = 2026;
+    private static final int MAX_NOTAS = 5;
     /*DATOS DEL ESTUDIANTE*/
     private String fechaNacimiento;  /*dd/mm/aaaa*/
     private String tipoSangre;
@@ -22,7 +25,9 @@ public class Estudiante extends Persona {
     private String documentoAcudiente;
     private String parentesco;
     private String telefonoAcudiente;
-    
+    /*NOTAS*/
+    private ArrayList<Float> notas;
+
     public Estudiante(String dDocumento, String dNombres, String dApellidos, String dTelefono, String dEps, String dFechaNacimiento, String dTipoSangre, String dAlergias,
                       String dHabilidades, String dDireccion, String dNombreAcudiente, String dDocumentoAcudiente, String dParentesco, String dTelefonoAcudiente){
         super(dDocumento, dNombres, dApellidos, dTelefono, dEps);
@@ -31,11 +36,45 @@ public class Estudiante extends Persona {
         alergias = dAlergias;
         habilidades = dHabilidades;
         direccion = dDireccion;
-        
+
         nombreAcudiente = dNombreAcudiente;
         documentoAcudiente = dDocumentoAcudiente;
         parentesco = dParentesco;
         telefonoAcudiente = dTelefonoAcudiente;
+
+        notas = new ArrayList<>();
+    }
+    public ArrayList<Float> getNotas() {
+        return notas;
+    }
+    public boolean agregarNota(float nota) {
+        if (nota < 0.0f || nota > 5.0f) {
+            return false;
+        }
+        if (notas.size() >= MAX_NOTAS) {
+            return false;
+        }
+        return notas.add(nota);
+    }
+    public boolean modificarNota(int indice, float nuevaNota) {
+        if (nuevaNota < 0.0f || nuevaNota > 5.0f) {
+            return false;
+        }
+        if (indice < 0 || indice >= notas.size()) {
+            return false;
+        }
+        notas.set(indice, nuevaNota);
+        return true;
+    }
+    public double calcularPromedio() {
+        if (notas.size() < MAX_NOTAS) {
+            return -1.0;
+        }
+        double suma = 0;
+        for (float nota : notas) {
+            suma += nota;
+        }
+        return suma / MAX_NOTAS;
     }
     public String getFechaNacimiento() {
         return fechaNacimiento;

@@ -4,6 +4,8 @@
  */
 package com.mycompany.kinderatelier.programa;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Ángela
@@ -26,6 +28,31 @@ public class Profesor extends Empleado {
     }
     public  Boolean esAdministrativo() {
         return false;
+    }
+    public boolean agregarNotaAEstudiante(Estudiante estudiante, float nota) {
+        return estudiante.agregarNota(nota);
+    }
+    public boolean modificarNotaEstudiante(Estudiante estudiante, int posicion, float nuevaNota) {
+        return estudiante.modificarNota(posicion - 1, nuevaNota);
+    }
+    public String verNotasEstudiante(Estudiante estudiante) {
+        ArrayList<Float> listaNotas = estudiante.getNotas();
+        if (listaNotas.isEmpty()) {
+            return "El estudiante " + estudiante.getNombreCompleto() + " no tiene notas registradas.";
+        }
+        String reporte = "Notas de " + estudiante.getNombreCompleto() + " (" + listaNotas.size() + "/5):\n";
+        for (int i = 0; i < listaNotas.size(); i++) {
+            reporte += "Nota " + (i + 1) + ": " + listaNotas.get(i) + "\n";
+        }
+        return reporte;
+    }
+    public String obtenerPromedioEstudiante(Estudiante estudiante) {
+        double promedio = estudiante.calcularPromedio();
+        if (promedio == -1.0) {
+            return "No se puede calcular el promedio. El estudiante tiene "
+                    + estudiante.getNotas().size() + " de 5 notas registradas.";
+        }
+        return "El promedio de " + estudiante.getNombreCompleto() + " es: " + promedio;
     }
     public String mostrarDatos() {
         String datos;

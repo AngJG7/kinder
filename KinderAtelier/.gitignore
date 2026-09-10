@@ -31,3 +31,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# PDF generado por la app (constancia de matricula)
+matricula.pdf
