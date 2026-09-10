@@ -34,6 +34,22 @@ public class Lector {
             }
         }return numero;
     }
+    public static float leerFloat(String mensaje) {
+        String ingreso;
+        float numero;
+        boolean valido;
+        numero = 0;
+        valido = false;
+        while (!valido) {
+            ingreso = leerTexto(mensaje);
+            if (esNumeroFloat(ingreso)) {
+                numero = Float.parseFloat(ingreso);
+                valido = true;
+            } else {
+                mostrar("Dato invalido. Escriba un numero entero.");
+            }
+        }return numero;
+    }
     public static void mostrar(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "",
                 JOptionPane.PLAIN_MESSAGE);
@@ -47,6 +63,19 @@ public class Lector {
         for (int i = 0; i < texto.length(); i++) {
             caracter = texto.charAt(i);
             if (caracter < '0' || caracter > '9') {
+                return false;
+            }
+        }return true;
+    }
+    private static boolean esNumeroFloat(String texto) {
+        char caracter;
+
+        if (texto.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < texto.length(); i++) {
+            caracter = texto.charAt(i);
+            if ((caracter < '0' || caracter > '9') && caracter != '.') {
                 return false;
             }
         }return true;

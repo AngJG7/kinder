@@ -3,6 +3,7 @@
  */
 
 package com.mycompany.kinderatelier.programa;
+import java.util.Arrays;
 /**
  *
  * @author Ángela
@@ -103,6 +104,16 @@ public class KinderAtelier {
         for (int i = 0; i < cantidadEmpleados; i++) {
             if (empleados[i].getDocumento().equals(documento)) {
                 encontrado = empleados[i];
+            }
+        }return encontrado;
+    }
+    public Profesor buscarProfesor(String documento) {
+        Profesor encontrado;
+
+        encontrado = null;
+        for (int i = 0; i < cantidadEmpleados; i++) {
+            if (empleados[i] instanceof Profesor && empleados[i].getDocumento().equals(documento)) {
+                encontrado = (Profesor) empleados[i];
             }
         }return encontrado;
     }
@@ -329,8 +340,21 @@ public class KinderAtelier {
         }
     }
     public Estudiante[] mejores10(){
-        //Esta función recorre todo el arreglo de estudiantes y los ordena de mejor a menos mejor y retorna el arreglo :)
-        Estudiante[] mejores10 = null;
-        return mejores10;
+        //Esta función hace un copia de todo el arreglo, los ordena por desempeño y devuelve un arreglo con los primeros 10
+        Estudiante[] mejores10 = Arrays.copyOf(estudiantes, estudiantes.length);
+        for (int i = 0;i<mejores10.length-1;i++){
+            for (int j = 0;j<mejores10.length-1-i;i++){
+                if (mejores10[j].calcularPromedio()<mejores10[j+1].calcularPromedio()){
+                    Estudiante aux = mejores10[j];
+                    mejores10[j] = mejores10[j+1];
+                    mejores10[j+1] = aux; 
+                }
+            }
+        }
+        if(cantidadEstudiantes > 10){
+            return Arrays.copyOfRange(mejores10,0,11);
+        } else{
+            return Arrays.copyOfRange(mejores10,0,cantidadEstudiantes);
+        }
     }
 }

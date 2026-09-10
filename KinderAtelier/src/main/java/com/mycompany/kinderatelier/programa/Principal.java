@@ -50,7 +50,9 @@ public class Principal {
             } else if (opcion == 11) {
                 consultarMatriculaPdf(kinder);
             } else if (opcion == 12){
-                
+                consultar10Mejores(kinder);
+            } else if (opcion == 13){
+                agregarNotasEstudiante(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -74,6 +76,8 @@ public class Principal {
                 9. Consultar un estudiante
                10. Generar constancia
                11. Consultar Matricula PDF
+               12. Consultar los 10 Mejores
+               13. Agregar Notas por estudiante
                 0. Salir
  
                Digite una opcion:""";
@@ -236,7 +240,7 @@ public class Principal {
         kinder.desmatricular(documento, motivo, fecha, quien);
         Lector.mostrar(kinder.getUltimoMensaje());
     }
- 
+    
      static void consultarTaller(KinderAtelier kinder) {
         String taller;
  
@@ -318,15 +322,50 @@ public class Principal {
         
     }
     
-    public void consultar10Mejores(KinderAtelier kinder) {
+    public static void agregarNotasEstudiante(KinderAtelier kinder){
+        String documento1;
+        String documento2;
+        documento1 = Lector.leerTexto("Ingrese el documento del estudiante: ");
+        documento2 = Lector.leerTexto("Ingrese el documento del profesor: ");
+        
+        kinder.buscarProfesor(documento2).agregarNotaAEstudiante(kinder.buscarEstudiante(documento1),Lector.leerFloat("Ingrese la nota: "));
+        
+    }
+    
+    public static void consultar10Mejores(KinderAtelier kinder) {
         //Llamo a un funcion del kinder para ordenar un arreglo con los 10 mejores estudiantes
         Estudiante[] arr = kinder.mejores10();
         // Creo una variable de tipo texto que va a contener todo el reporte
         String texto = "";
         for (int i = 0;i<arr.length;i++){
-            texto += "1. "+arr[i].getNombreCompleto()+"Edad: "+arr[i].calcularEdad()+"Promedio: "+arr[i].calcularPromedio()+"\n";
+            texto += (i+1)+". "+arr[i].getNombreCompleto()+"   Edad: "+arr[i].calcularEdad()+"  Promedio: "+arr[i].calcularPromedio()+"\n";
         }
         Lector.mostrar(texto);
+        try {
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("reporte10Mejores.pdf"));
+            doc.open();
+            
+            Font font = FontFactory.getFont(BaseFont.TIMES_BOLD, 21, BaseColor.BLACK);
+            Paragraph titulo = new Paragraph("LISTADO 10 MEJORES ESTUDIANTES DEL KINDER ATELIER",font);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            doc.add(titulo);
+            
+            font = FontFactory.getFont(BaseFont.TIMES_ITALIC,12,BaseColor.BLACK);
+            Paragraph info = new Paragraph(texto,font);
+            doc.add(info);
+            doc.close();
+            
+            
+        } catch (DocumentException | java.io.FileNotFoundException e){
+            e.printStackTrace();
+        }
+        Lector.mostrar("Cargando Documento...");
+        try {
+            Runtime.getRuntime().exec("cmd /c start reporte10Mejores.pdf");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;
