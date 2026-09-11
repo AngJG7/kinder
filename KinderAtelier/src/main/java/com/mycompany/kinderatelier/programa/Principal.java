@@ -53,6 +53,8 @@ public class Principal {
                 agregarNotasEstudiante(kinder);
             } else if (opcion == 13){
                 aplicarDescuento(kinder);
+            }else if (opcion == 14){
+                consultarInformeDeNotas(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -78,6 +80,7 @@ public class Principal {
                11. Consultar los 10 Mejores
                12. Agregar Notas por estudiante
                13. Aplicar Descuentos de Honor
+               14. Consultar Informe de Notas
                 0. Salir
  
                Digite una opcion:""";
@@ -336,7 +339,24 @@ public class Principal {
         }
         
     }
-    
+    public static void consultarInformeDeNotas(KinderAtelier kinder){
+        String doc = Lector.leerTexto("Ingrese el documento del estudiante: ");
+        kinder.consultarNotas(doc);
+        try {
+            String archivo = "notas_"+kinder.buscarEstudiante(doc).getDocumento()+".pdf";
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec("cmd /c start " + archivo);
+            } else if (os.contains("nix") || os.contains("nux")) {
+                Runtime.getRuntime().exec("xdg-open " + archivo);
+            } else if (os.contains("mac")) {
+                Runtime.getRuntime().exec("open " + archivo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     public static void agregarNotasEstudiante(KinderAtelier kinder) {
     String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
@@ -414,7 +434,7 @@ public class Principal {
 
         // 2. Arreglo de 12 Estudiantes (Suficientes para llenar el Top 10 y dejar 2 por fuera)
         Estudiante[] estudiantes = new Estudiante[] {
-            new Estudiante("101", "Camila", "Perez Gomez", "3001112233", "Sura", "10/01/2021", "O+", "", "Le gusta pintar", "Calle 10 # 5-12", "Laura Perez", "401", "Madre", "3001112233"),
+            new Estudiante("101", "Camila", "Perez Gomez", "3001112233", "Sura", "10/01/2024", "O+", "", "Le gusta pintar", "Calle 10 # 5-12", "Laura Perez", "401", "Madre", "3001112233"),
             new Estudiante("102", "Samuel", "Castro Rios", "3002223344", "Savia Salud", "15/04/2021", "A+", "Polen", "Toca el xilofono", "Carrera 43A # 12-09", "Pedro Castro", "402", "Padre", "3002223344"),
             new Estudiante("103", "Valentina", "Ortiz Marin", "3003334455", "Sura", "20/06/2021", "B+", "", "Muy expresiva", "Calle 50 # 20-30", "Marta Marin", "403", "Madre", "3003334455"),
             new Estudiante("104", "Sofia", "Gomez Ruiz", "3201234567", "Sura", "12/03/2022", "O+", "", "Canta y baila", "Calle 45 # 30-12", "Ana Ruiz", "431", "Madre", "3201234567"),

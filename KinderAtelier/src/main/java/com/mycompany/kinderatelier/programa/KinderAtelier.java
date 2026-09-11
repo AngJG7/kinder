@@ -8,6 +8,7 @@ import java.util.Arrays;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 /**
  *
  * @author Ángela
@@ -538,4 +539,131 @@ public class KinderAtelier {
         }
         return sb.toString();
     }
+    
+    public void consultarNotas(String doc){
+        Estudiante estudiante = buscarEstudiante(doc);
+        ArrayList <Float>notas = estudiante.getNotas();
+        String patologias = "";
+        String idTalentosEstudiante = Lector.leerTexto("Descripción de los talentos deportivos, artísticos, académicos y sociales de los estudiantes");
+        String informe = "Notas de "+estudiante.getNombreCompleto()+" - "+estudiante.getDocumento()+"\n";
+        for (int i = 0;i<notas.size();i++){
+            informe += "Nota #"+(i+1)+": "+notas.get(i)+"\n";
+        }
+        informe +="\n Talentos del Estudiante: "+idTalentosEstudiante;
+        if(estudiante.calcularEdad()<3){
+            patologias = Lector.leerTexto("Informe de las Patologias fisicas y mentales del Estudiante: ");
+            informe += "\n Informe de Patologías: \n"+patologias;
+        }
+        Lector.mostrar(informe);
+        Lector.mostrar(consultarNotasPDF(doc,idTalentosEstudiante,patologias));
+    }
+    public String consultarNotasPDF(String doc,String idTalentos,String patologias){
+        Estudiante estudiante = buscarEstudiante(doc);
+        ArrayList <Float>notas = estudiante.getNotas();
+        String archivo = "notas_"+estudiante.getDocumento()+".pdf";
+        try {
+            Document doc2 = new Document(PageSize.A4, 50, 50, 50, 50);
+            PdfWriter.getInstance(doc2, new FileOutputStream(archivo));
+            doc2.open();
+
+            // 1. Colores y fuentes corporativas
+            BaseColor azulOscuro = new BaseColor(30, 81, 123);
+            BaseColor grisTexto = new BaseColor(60, 60, 60);
+
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
+            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
+            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, azulOscuro);
+            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, grisTexto);
+            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, grisTexto);
+            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.GRAY);
+
+            // 2. Encabezado de la Institución
+            Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
+            pKinder.setAlignment(Element.ALIGN_CENTER);
+            doc2.add(pKinder);
+
+            Paragraph pNit = new Paragraph("NIT: " + nit, fontSubHeader);
+            pNit.setAlignment(Element.ALIGN_CENTER);
+            pNit.setSpacingAfter(10);
+            doc2.add(pNit);
+
+            // Línea divisoria
+            Paragraph linea = new Paragraph("________________________________________________________________________", fontSubHeader);
+            linea.setAlignment(Element.ALIGN_CENTER);
+            linea.setSpacingAfter(15);
+            doc2.add(linea);
+
+            // 3. Título Principal
+            Paragraph pTitulo = new Paragraph("INFORME DE NOTAS - "+estudiante.getNombreCompleto()+" - "+estudiante.getDocumento(), fontTitulo);
+            pTitulo.setAlignment(Element.ALIGN_CENTER);
+            pTitulo.setSpacingAfter(20);
+            doc2.add(pTitulo);
+
+            // 4. Notas del Estudiante
+            if (notas.size() == 0) {
+                Paragraph pVacio = new Paragraph("No hay estudiantes registrados o con notas disponibles.", fontNormal);
+                pVacio.setAlignment(Element.ALIGN_CENTER);
+                doc2.add(pVacio);
+            } else {
+                for (int i = 0; i < notas.size(); i++) {
+                    Float e = notas.get(i);
+                    if (e == null) {
+                        continue;
+                    }
+
+                    Float nota = notas.get(i);
+                    
+
+                    Paragraph pItem = new Paragraph();
+                    pItem.setLeading(16f);
+
+                    // Número de nota y nota
+                    pItem.add(new Chunk((i + 1) + ". ", fontSeccion));
+                    pItem.add(new Chunk("NOTA : "+nota, fontBold));
+
+
+                    pItem.setSpacingAfter(10);
+                    doc2.add(pItem);
+                }
+            }
+            Paragraph prom = new Paragraph("Promedio Obtenido: "+estudiante.calcularPromedio(),fontBold);
+            Paragraph tituloTalentos = new Paragraph("Talentos del Estudiante",fontTitulo);
+            Paragraph talentos = new Paragraph(idTalentos,fontBold);
+            
+            prom.setSpacingAfter(10);
+            doc2.add(prom);
+            
+            tituloTalentos.setSpacingAfter(8);
+            doc2.add(tituloTalentos);
+            doc2.add(talentos);
+            
+            if(!(patologias.isBlank())){
+                Paragraph tituloEnfermedades = new Paragraph("Patologías del Estudiante",fontTitulo);
+                Paragraph enfermedades = new Paragraph(patologias,fontBold);
+                
+                tituloEnfermedades.setSpacingAfter(8);
+                
+                doc2.add(tituloEnfermedades);
+                doc2.add(enfermedades);
+            }
+            
+            // 5. Pie de página
+            Paragraph pie = new Paragraph(
+                "Informe de notas generado automáticamente por " + nombre + ".",
+                fontPie
+            );
+            pie.setSpacingBefore(15);
+            pie.setAlignment(Element.ALIGN_CENTER);
+            doc2.add(pie);
+
+            doc2.close();
+            return "Informe de notas generado exitosamente.\n";
+
+        } catch (DocumentException | java.io.FileNotFoundException e) {
+            e.printStackTrace();
+            return "Error generando el reporte de mejores estudiantes.\n";
+        }
+    }
+        
 }
