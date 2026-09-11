@@ -57,6 +57,7 @@ public class VentanaReportes extends javax.swing.JFrame {
         talentosPorCategoria = new javax.swing.JButton();
         distribucionTalentos = new javax.swing.JButton();
         top10 = new javax.swing.JButton();
+        generarPdfTop10Btn = new javax.swing.JButton();
         aplicarDescuentoBtn = new javax.swing.JButton();
         volver = new javax.swing.JButton();
 
@@ -83,6 +84,9 @@ public class VentanaReportes extends javax.swing.JFrame {
         top10.setText("Top 10 estudiantes");
         top10.addActionListener(this::top10ActionPerformed);
 
+        generarPdfTop10Btn.setText("Generar PDF");
+        generarPdfTop10Btn.addActionListener(this::generarPdfTop10BtnActionPerformed);
+
         aplicarDescuentoBtn.setText("Aplicar descuentos Top 10");
         aplicarDescuentoBtn.addActionListener(this::aplicarDescuentoBtnActionPerformed);
 
@@ -106,6 +110,8 @@ public class VentanaReportes extends javax.swing.JFrame {
                     .addComponent(talentosPorCategoria)
                     .addComponent(ocupacionPorTaller)
                     .addComponent(top10))
+                .addGap(24, 24, 24)
+                .addComponent(generarPdfTop10Btn)
                 .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -133,7 +139,8 @@ public class VentanaReportes extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(distribucionTalentos)
-                    .addComponent(top10))
+                    .addComponent(top10)
+                    .addComponent(generarPdfTop10Btn))
                 .addGap(38, 38, 38)
                 .addComponent(aplicarDescuentoBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
@@ -170,6 +177,24 @@ public class VentanaReportes extends javax.swing.JFrame {
         Lector.mostrar(kinder.generarMejores10Texto());
     }//GEN-LAST:event_top10ActionPerformed
 
+    private void generarPdfTop10BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarPdfTop10BtnActionPerformed
+        Lector.mostrar(kinder.generarMejores10Pdf());
+        try {
+            String archivo = "mejores10.pdf";
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec("cmd /c start " + archivo);
+            } else if (os.contains("nix") || os.contains("nux")) {
+                Runtime.getRuntime().exec("xdg-open " + archivo);
+            } else if (os.contains("mac")) {
+                Runtime.getRuntime().exec("open " + archivo);
+            }
+        } catch (Exception e) {
+            logger.log(java.util.logging.Level.WARNING, "No se pudo abrir el PDF del Top 10", e);
+        }
+    }//GEN-LAST:event_generarPdfTop10BtnActionPerformed
+
     private void aplicarDescuentoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicarDescuentoBtnActionPerformed
         kinder.aplicarDescuentoMejores10();
         Estudiante[] mejores = kinder.mejores10();
@@ -200,6 +225,7 @@ public class VentanaReportes extends javax.swing.JFrame {
     private javax.swing.JButton aplicarDescuentoBtn;
     private javax.swing.JButton catalogoActividades;
     private javax.swing.JButton distribucionTalentos;
+    private javax.swing.JButton generarPdfTop10Btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton ocupacionPorTaller;
     private javax.swing.JButton ocupacionTalleres;

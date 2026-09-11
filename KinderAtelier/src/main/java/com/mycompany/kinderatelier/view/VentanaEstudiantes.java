@@ -74,6 +74,49 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
                 KinderAtelier.TALENTOS[eleccion - 1]);
         Lector.mostrar(kinder.getUltimoMensaje());
     }
+    private void agregarNota() {
+        Estudiante estudiante;
+        Profesor profesor;
+        float nota;
+
+        estudiante = estudianteBuscado();
+        if (estudiante == null) {
+            return;
+        }
+        profesor = kinder.buscarProfesor(
+                Lector.leerTexto("Documento del profesor que califica:"));
+        if (profesor == null) {
+            Lector.mostrar("No existe un profesor con ese documento.");
+            return;
+        }
+        nota = Lector.leerFloat("Ingrese la nota (0.0 a 5.0):");
+        if (profesor.agregarNotaAEstudiante(estudiante, nota)) {
+            Lector.mostrar("Nota agregada con exito.");
+        } else {
+            Lector.mostrar("No se pudo agregar la nota (fuera de rango 0-5 o limite de 5 notas alcanzado).");
+        }
+    }
+    private void registrarPatologia() {
+        Estudiante estudiante;
+        String texto;
+
+        estudiante = estudianteBuscado();
+        if (estudiante == null) {
+            return;
+        }
+        texto = Lector.leerTexto("Informe de patologias fisicas o mentales del estudiante:");
+        estudiante.setPatologias(texto);
+        Lector.mostrar("Patologias registradas para " + estudiante.getNombreCompleto());
+    }
+    private void generarBoletin() {
+        Estudiante estudiante;
+
+        estudiante = estudianteBuscado();
+        if (estudiante == null) {
+            return;
+        }
+        Lector.mostrar(kinder.generarBoletinPdf(estudiante.getDocumento()));
+    }
     private void hojaDeVida() {
         Estudiante estudiante;
         Matricula matricula;
@@ -159,6 +202,9 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         verHistorial = new javax.swing.JButton();
         verNotas = new javax.swing.JButton();
         asignarTalentoBtn = new javax.swing.JButton();
+        agregarNotaBtn = new javax.swing.JButton();
+        registrarPatologiaBtn = new javax.swing.JButton();
+        generarBoletinBtn = new javax.swing.JButton();
         generarHojaDeVida = new javax.swing.JButton();
         verDatos = new javax.swing.JButton();
         volver = new javax.swing.JButton();
@@ -187,6 +233,15 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
 
         asignarTalentoBtn.setText("Asignar talento");
         asignarTalentoBtn.addActionListener(this::asignarTalentoBtnActionPerformed);
+
+        agregarNotaBtn.setText("Agregar nota");
+        agregarNotaBtn.addActionListener(this::agregarNotaBtnActionPerformed);
+
+        registrarPatologiaBtn.setText("Registrar patologia");
+        registrarPatologiaBtn.addActionListener(this::registrarPatologiaBtnActionPerformed);
+
+        generarBoletinBtn.setText("Generar Boletin");
+        generarBoletinBtn.addActionListener(this::generarBoletinBtnActionPerformed);
 
         generarHojaDeVida.setText("Generar Hoja de Vida");
         generarHojaDeVida.addActionListener(this::generarHojaDeVidaActionPerformed);
@@ -221,9 +276,15 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(generarHojaDeVida)
-                        .addGap(171, 171, 171)
+                        .addGap(18, 18, 18)
+                        .addComponent(agregarNotaBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(registrarPatologiaBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(generarBoletinBtn)
+                        .addGap(40, 40, 40)
                         .addComponent(volver)
-                        .addContainerGap())
+                        .addGap(27, 27, 27))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -260,7 +321,11 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
                     .addComponent(verDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(asignarTalentoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
-                .addComponent(generarHojaDeVida)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(generarHojaDeVida)
+                    .addComponent(agregarNotaBtn)
+                    .addComponent(registrarPatologiaBtn)
+                    .addComponent(generarBoletinBtn))
                 .addGap(18, 18, 18))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -314,6 +379,18 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         asignarTalento();
     }//GEN-LAST:event_asignarTalentoBtnActionPerformed
 
+    private void agregarNotaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarNotaBtnActionPerformed
+        agregarNota();
+    }//GEN-LAST:event_agregarNotaBtnActionPerformed
+
+    private void registrarPatologiaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarPatologiaBtnActionPerformed
+        registrarPatologia();
+    }//GEN-LAST:event_registrarPatologiaBtnActionPerformed
+
+    private void generarBoletinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarBoletinBtnActionPerformed
+        generarBoletin();
+    }//GEN-LAST:event_generarBoletinBtnActionPerformed
+
     private void generarHojaDeVidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarHojaDeVidaActionPerformed
         hojaDeVida();
     }//GEN-LAST:event_generarHojaDeVidaActionPerformed
@@ -324,8 +401,10 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton agregarNotaBtn;
     private javax.swing.JButton asignarTalentoBtn;
     private javax.swing.JTextField documentoEstudiantes;
+    private javax.swing.JButton generarBoletinBtn;
     private javax.swing.JButton generarHojaDeVida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -335,6 +414,7 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
     private javax.swing.JButton verHistorial;
     private javax.swing.JButton verListaEstudiantes;
     private javax.swing.JButton verNotas;
+    private javax.swing.JButton registrarPatologiaBtn;
     private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

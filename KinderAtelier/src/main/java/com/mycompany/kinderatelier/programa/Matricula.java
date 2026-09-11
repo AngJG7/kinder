@@ -166,8 +166,9 @@ public class Matricula {
     
     public String generarMatriculaPdf(String nombreKinder, String nitKinder){
         try {
+            String nombreArchivo = "matricula_" + numero + ".pdf";
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream("matricula.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
             doc.open();
             
             

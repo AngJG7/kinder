@@ -21,6 +21,7 @@ public class Estudiante extends Persona {
     private String habilidades;
     private String talento;      /*deportivo, artistico, academico o social*/
     private String direccion;
+    private String patologias;   /*fisicas o mentales, solo aplica a menores de 3 anios (HU4)*/
     /*DATOS DEL ACUDIENTE*/
     private String nombreAcudiente;
     private String documentoAcudiente;
@@ -44,6 +45,7 @@ public class Estudiante extends Persona {
         telefonoAcudiente = dTelefonoAcudiente;
 
         talento = "";   // se asigna despues con setTalento, para no cambiar el constructor
+        patologias = "";   // se asigna despues con setPatologias, para no cambiar el constructor
         notas = new ArrayList<>();
     }
     public ArrayList<Float> getNotas() {
@@ -95,6 +97,21 @@ public class Estudiante extends Persona {
     }
     public boolean tieneTalento() {
         return !talento.isEmpty();
+    }
+    public String getPatologias() {
+        return patologias;
+    }
+    public void setPatologias(String dPatologias) {
+        patologias = dPatologias;
+    }
+    /**
+     * HU4: el informe de patologias fisicas/mentales solo aplica a
+     * menores de 3 anios. Hoy el kinder matricula de EDAD_MINIMA a
+     * EDAD_MAXIMA (4 a 5), asi que en la practica esto queda listo
+     * para el dia que se ajuste ese rango, pero no se pide todavia.
+     */
+    public boolean requierePatologias() {
+        return calcularEdad() < 3;
     }
     public String getNombreAcudiente() {
         return nombreAcudiente;
@@ -168,6 +185,11 @@ public class Estudiante extends Persona {
                 + "Telefono: " + telefono + "\n"
                 + "Acudiente: " + nombreAcudiente + " (" + parentesco + ")\n"
                 + "Tel. acudiente: " + telefonoAcudiente + "\n";
+        if (requierePatologias()) {
+            String textoPatologias = patologias.isEmpty()
+                    ? "sin registrar" : patologias;
+            datos = datos + "Patologias (menor de 3 anios): " + textoPatologias + "\n";
+        }
         return datos;
     }
 }

@@ -688,4 +688,136 @@ public class KinderAtelier {
         }
         return sb.toString();
     }
+
+    /**
+     * HU3: Boletin de notas del estudiante, con las notas registradas,
+     * el promedio y los datos del grupo familiar (acudiente responsable).
+     * Se guarda con el documento en el nombre del archivo para que cada
+     * estudiante tenga su propio PDF y no se sobrescriban entre si.
+     */
+    public String generarBoletinPdf(String documentoEstudiante) {
+        Estudiante estudiante = buscarEstudiante(documentoEstudiante);
+        if (estudiante == null) {
+            return "No existe un estudiante con documento " + documentoEstudiante + "\n";
+        }
+
+        String nombreArchivo = "boletin_" + estudiante.getDocumento() + ".pdf";
+        try {
+            Document doc = new Document(PageSize.A4, 50, 50, 50, 50);
+            PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
+            doc.open();
+
+            BaseColor azulOscuro = new BaseColor(30, 81, 123);
+            BaseColor grisTexto = new BaseColor(60, 60, 60);
+
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
+            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
+            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, azulOscuro);
+            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, grisTexto);
+            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, grisTexto);
+            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.GRAY);
+
+            Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
+            pKinder.setAlignment(Element.ALIGN_CENTER);
+            doc.add(pKinder);
+
+            Paragraph pNit = new Paragraph("NIT: " + nit, fontSubHeader);
+            pNit.setAlignment(Element.ALIGN_CENTER);
+            pNit.setSpacingAfter(10);
+            doc.add(pNit);
+
+            Paragraph linea = new Paragraph("________________________________________________________________________", fontSubHeader);
+            linea.setAlignment(Element.ALIGN_CENTER);
+            linea.setSpacingAfter(15);
+            doc.add(linea);
+
+            Paragraph pTitulo = new Paragraph("BOLETIN DE NOTAS", fontTitulo);
+            pTitulo.setAlignment(Element.ALIGN_CENTER);
+            pTitulo.setSpacingAfter(20);
+            doc.add(pTitulo);
+
+            Paragraph pSecEstudiante = new Paragraph("DATOS DEL ESTUDIANTE", fontSeccion);
+            pSecEstudiante.setSpacingAfter(6);
+            doc.add(pSecEstudiante);
+
+            Paragraph pEstudiante = new Paragraph();
+            pEstudiante.setLeading(16f);
+            pEstudiante.add(new Chunk("Nombre completo: ", fontBold));
+            pEstudiante.add(new Chunk(estudiante.getNombreCompleto() + "\n", fontNormal));
+            pEstudiante.add(new Chunk("Documento: ", fontBold));
+            pEstudiante.add(new Chunk(estudiante.getDocumento() + "\n", fontNormal));
+            pEstudiante.add(new Chunk("Edad: ", fontBold));
+            pEstudiante.add(new Chunk(estudiante.calcularEdad() + " anios\n", fontNormal));
+            pEstudiante.setSpacingAfter(15);
+            doc.add(pEstudiante);
+
+            Paragraph pSecFamilia = new Paragraph("GRUPO FAMILIAR - ACUDIENTE RESPONSABLE", fontSeccion);
+            pSecFamilia.setSpacingAfter(6);
+            doc.add(pSecFamilia);
+
+            Paragraph pFamilia = new Paragraph();
+            pFamilia.setLeading(16f);
+            pFamilia.add(new Chunk("Nombre: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getNombreAcudiente() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Parentesco: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getParentesco() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Documento: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getDocumentoAcudiente() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Telefono: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getTelefonoAcudiente() + "\n", fontNormal));
+            pFamilia.setSpacingAfter(15);
+            doc.add(pFamilia);
+
+            Paragraph pSecNotas = new Paragraph("NOTAS", fontSeccion);
+            pSecNotas.setSpacingAfter(6);
+            doc.add(pSecNotas);
+
+            java.util.ArrayList<Float> notas = estudiante.getNotas();
+            if (notas.isEmpty()) {
+                Paragraph pVacio = new Paragraph("Este estudiante no tiene notas registradas.", fontNormal);
+                doc.add(pVacio);
+            } else {
+                for (int i = 0; i < notas.size(); i++) {
+                    Paragraph pNota = new Paragraph("Nota " + (i + 1) + ": " + notas.get(i), fontNormal);
+                    doc.add(pNota);
+                }
+            }
+
+            double promedio = estudiante.calcularPromedio();
+            String strPromedio = (promedio == -1.0)
+                    ? "Pendiente (menos de 5 notas)"
+                    : String.format("%.2f", promedio);
+            Paragraph pProm = new Paragraph("Promedio: " + strPromedio, fontBold);
+            pProm.setSpacingBefore(10);
+            pProm.setSpacingAfter(15);
+            doc.add(pProm);
+
+            if (estudiante.requierePatologias()) {
+                Paragraph pSecPatologias = new Paragraph("PATOLOGIAS (MENOR DE 3 ANIOS)", fontSeccion);
+                pSecPatologias.setSpacingAfter(6);
+                doc.add(pSecPatologias);
+
+                String textoPatologias = estudiante.getPatologias().isEmpty()
+                        ? "Sin registrar" : estudiante.getPatologias();
+                Paragraph pPatologias = new Paragraph(textoPatologias, fontNormal);
+                pPatologias.setSpacingAfter(15);
+                doc.add(pPatologias);
+            }
+
+            Paragraph pie = new Paragraph(
+                "Boletin generado automaticamente por " + nombre + ".",
+                fontPie
+            );
+            pie.setAlignment(Element.ALIGN_CENTER);
+            doc.add(pie);
+
+            doc.close();
+            return "Boletin generado exitosamente.\n";
+
+        } catch (DocumentException | java.io.FileNotFoundException e) {
+            e.printStackTrace();
+            return "Error al generar el boletin en PDF.\n";
+        }
+    }
 }

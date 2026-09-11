@@ -65,7 +65,9 @@ public class Profesor extends Empleado {
                 + "EPS: " + eps + "\n"
                 + "Salario: $" + getSalario() + "\n"
                 + "Fecha de Ingreso: " + fechaIngreso + "\n"
-                + "Telefono: " + telefono + "\n";
+                + "Telefono: " + telefono + "\n"
+                + "Titulo: " + titulo + "\n"
+                + "Rama asignada: " + ramaAsignada + "\n";
         return datos;
     }
 }

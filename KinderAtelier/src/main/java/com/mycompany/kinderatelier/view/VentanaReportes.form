@@ -37,6 +37,8 @@
                   <Component id="ocupacionPorTaller" min="-2" max="-2" attributes="0"/>
                   <Component id="top10" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              <Component id="generarPdfTop10Btn" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
@@ -73,6 +75,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="distribucionTalentos" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="top10" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="generarPdfTop10Btn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
               <Component id="aplicarDescuentoBtn" min="-2" max="-2" attributes="0"/>
@@ -138,6 +141,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="top10ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="generarPdfTop10Btn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Generar PDF"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generarPdfTop10BtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="aplicarDescuentoBtn">
