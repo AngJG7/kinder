@@ -37,12 +37,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         sofia = new Estudiante("1098765432", "Sofia", "Gomez Ruiz",
                 "3201234567", "Sura", "12/03/2022", "O+", "",
                 "Canta y baila todo el dia", "Calle 45 # 30-12",
-                "Ana Ruiz Molina", "43112233", "Madre", "3201234567");
+                "Carlos Gomez Perez", "43198877", "3209876543",
+                "Ana Ruiz Molina", "43112233", "3201234567");
 
         mateo = new Estudiante("1087654321", "Mateo", "Alvarez Diaz",
                 "3117654321", "Savia Salud", "08/07/2021", "A+", "Mani",
                 "Dibuja muy bien", "Carrera 50 # 12-04",
-                "Jorge Alvarez Pena", "71445566", "Padre", "3117654321");
+                "Jorge Alvarez Pena", "71445566", "3117654321",
+                "Lucia Diaz Soto", "71449988", "3117659876");
 
         kinder.agregarEstudiante(sofia);
         kinder.agregarEstudiante(mateo);

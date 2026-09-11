@@ -85,10 +85,12 @@ public class Principal {
         String alergias;
         String habilidades;
         String direccion;
-        String nombreAcudiente;
-        String documentoAcudiente;
-        String parentesco;
-        String telefonoAcudiente;
+        String nombrePadre;
+        String documentoPadre;
+        String telefonoPadre;
+        String nombreMadre;
+        String documentoMadre;
+        String telefonoMadre;
 
         documento = Lector.leerTexto("Documento del estudiante:");
         if (documento.isEmpty()) {
@@ -111,15 +113,17 @@ public class Principal {
         habilidades = Lector.leerTexto("Habilidades artisticas que muestra:");
         direccion = Lector.leerTexto("Direccion:");
 
-        nombreAcudiente = Lector.leerTexto("Nombre del acudiente:");
-        documentoAcudiente = Lector.leerTexto("Documento del acudiente:");
-        parentesco = Lector.leerTexto("Parentesco (Madre, Padre, etc.):");
-        telefonoAcudiente = Lector.leerTexto("Telefono del acudiente:");
+        nombrePadre = Lector.leerTexto("Nombre del padre:");
+        documentoPadre = Lector.leerTexto("Documento del padre:");
+        telefonoPadre = Lector.leerTexto("Telefono del padre:");
+        nombreMadre = Lector.leerTexto("Nombre de la madre:");
+        documentoMadre = Lector.leerTexto("Documento de la madre:");
+        telefonoMadre = Lector.leerTexto("Telefono de la madre:");
 
         nuevo = new Estudiante(documento, nombres, apellidos, telefono, eps,
                 fechaNacimiento, tipoSangre, alergias, habilidades, direccion,
-                nombreAcudiente, documentoAcudiente, parentesco,
-                telefonoAcudiente);
+                nombrePadre, documentoPadre, telefonoPadre,
+                nombreMadre, documentoMadre, telefonoMadre);
 
         if (kinder.agregarEstudiante(nuevo)) {
             Lector.mostrar("Estudiante registrado:\n\n" + nuevo.mostrarDatos());
@@ -417,12 +421,14 @@ public class Principal {
         sofia = new Estudiante("109", "Sofia", "Gomez Ruiz",
                 "3201234567", "Sura", "12/03/2022", "O+", "",
                 "Canta y baila todo el dia", "Calle 45 # 30-12",
-                "Ana Ruiz Molina", "431", "Madre", "3201234567");
+                "Carlos Gomez Perez", "432", "3209876543",
+                "Ana Ruiz Molina", "431", "3201234567");
 
         mateo = new Estudiante("108", "Mateo", "Alvarez Diaz",
                 "3117654321", "Savia Salud", "08/07/2021", "A+", "Mani",
                 "Dibuja muy bien", "Carrera 50 # 12-04",
-                "Jorge Alvarez Pena", "714", "Padre", "3117654321");
+                "Jorge Alvarez Pena", "714", "3117654321",
+                "Lucia Diaz Soto", "715", "3117659876");
 
         kinder.agregarEstudiante(sofia);
         kinder.agregarEstudiante(mateo);

@@ -108,8 +108,8 @@ public class Matricula {
                 + "Ramas artisticas: " + listarRamas() + "\n"
                 + "Estudiante: " + estudiante.getNombreCompleto()
                         + " (doc. " + estudiante.getDocumento() + ")\n"
-                + "Acudiente responsable: " + estudiante.getNombreAcudiente()
-                        + " - " + estudiante.getParentesco() + "\n"
+                + "Padre: " + estudiante.getNombrePadre() + "\n"
+                + "Madre: " + estudiante.getNombreMadre() + "\n"
                 + "Registrada por: " + registradaPor.getNombreCompleto()
                         + " - " + registradaPor.getCargo() + "\n";
 
@@ -129,9 +129,10 @@ public class Matricula {
                  %s - NIT %s
                ================================================
 
-               Senor(a) %s,
-               identificado(a) con documento %s,
-               en calidad de %s del estudiante:
+               Padre: %s (doc. %s)
+               Madre: %s (doc. %s)
+
+               En calidad de acudientes del estudiante:
 
                   %s (doc. %s)
 
@@ -143,17 +144,20 @@ public class Matricula {
                   Valor:        $%.0f
                   Estado:       %s
 
-               Como acudiente responsable, usted es el contacto
+               Como acudientes responsables, ustedes son el contacto
                autorizado para autorizaciones y retiros.
-               Telefono registrado: %s
+               Telefono padre: %s
+               Telefono madre: %s
                """.formatted(numero, nombreKinder, nitKinder,
-                             estudiante.getNombreAcudiente(),
-                             estudiante.getDocumentoAcudiente(),
-                             estudiante.getParentesco(),
+                             estudiante.getNombrePadre(),
+                             estudiante.getDocumentoPadre(),
+                             estudiante.getNombreMadre(),
+                             estudiante.getDocumentoMadre(),
                              estudiante.getNombreCompleto(),
                              estudiante.getDocumento(), fecha,
                              anioLectivo, listarRamas(), valor, estado,
-                             estudiante.getTelefonoAcudiente());
+                             estudiante.getTelefonoPadre(),
+                             estudiante.getTelefonoMadre());
     }
 
     public String generarMatriculaPdf(String nombreKinder, String nitKinder){
