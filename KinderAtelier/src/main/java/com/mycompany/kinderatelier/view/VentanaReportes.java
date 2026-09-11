@@ -57,6 +57,8 @@ public class VentanaReportes extends javax.swing.JFrame {
         talentosPorCategoria = new javax.swing.JButton();
         distribucionTalentos = new javax.swing.JButton();
         top10 = new javax.swing.JButton();
+        aplicarDescuentoBtn = new javax.swing.JButton();
+        volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,6 +83,13 @@ public class VentanaReportes extends javax.swing.JFrame {
         top10.setText("Top 10 estudiantes");
         top10.addActionListener(this::top10ActionPerformed);
 
+        aplicarDescuentoBtn.setText("Aplicar descuentos Top 10");
+        aplicarDescuentoBtn.addActionListener(this::aplicarDescuentoBtnActionPerformed);
+
+        volver.setText("Volver");
+        volver.setToolTipText("");
+        volver.addActionListener(this::volverActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,17 +99,23 @@ public class VentanaReportes extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ocupacionTalleres)
                     .addComponent(catalogoActividades)
-                    .addComponent(distribucionTalentos))
+                    .addComponent(distribucionTalentos)
+                    .addComponent(aplicarDescuentoBtn))
                 .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(talentosPorCategoria)
                     .addComponent(ocupacionPorTaller)
                     .addComponent(top10))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(134, 134, 134))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(134, 134, 134))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(volver)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,11 +130,15 @@ public class VentanaReportes extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(catalogoActividades)
                     .addComponent(talentosPorCategoria))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(distribucionTalentos)
                     .addComponent(top10))
-                .addGap(37, 37, 37))
+                .addGap(38, 38, 38)
+                .addComponent(aplicarDescuentoBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(volver)
+                .addContainerGap())
         );
 
         pack();
@@ -151,7 +170,34 @@ public class VentanaReportes extends javax.swing.JFrame {
         Lector.mostrar(kinder.generarMejores10Texto());
     }//GEN-LAST:event_top10ActionPerformed
 
+    private void aplicarDescuentoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicarDescuentoBtnActionPerformed
+        kinder.aplicarDescuentoMejores10();
+        Estudiante[] mejores = kinder.mejores10();
+        StringBuilder resumen = new StringBuilder("Valor de matricula tras aplicar el descuento:\n\n");
+        boolean hayDatos = false;
+        for (Estudiante e : mejores) {
+            if (e == null) continue;
+            Matricula matricula = kinder.buscarMatriculaActiva(e.getDocumento());
+            if (matricula != null) {
+                hayDatos = true;
+                resumen.append(e.getNombreCompleto())
+                        .append(" (Doc. ").append(e.getDocumento()).append("): $")
+                        .append(String.format("%.0f", matricula.getValor()))
+                        .append("\n");
+            }
+        }
+        if (!hayDatos) {
+            resumen.append("No hay estudiantes del Top 10 con matricula activa.");
+        }
+        Lector.mostrar(resumen.toString());
+    }//GEN-LAST:event_aplicarDescuentoBtnActionPerformed
+
+    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_volverActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton aplicarDescuentoBtn;
     private javax.swing.JButton catalogoActividades;
     private javax.swing.JButton distribucionTalentos;
     private javax.swing.JLabel jLabel1;
@@ -159,5 +205,6 @@ public class VentanaReportes extends javax.swing.JFrame {
     private javax.swing.JButton ocupacionTalleres;
     private javax.swing.JButton talentosPorCategoria;
     private javax.swing.JButton top10;
+    private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

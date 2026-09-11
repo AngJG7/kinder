@@ -132,6 +132,7 @@ public class VentanaMatriculas extends javax.swing.JFrame {
         matricular = new javax.swing.JButton();
         desmatricular = new javax.swing.JButton();
         verConstancia = new javax.swing.JButton();
+        volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -150,6 +151,10 @@ public class VentanaMatriculas extends javax.swing.JFrame {
 
         verConstancia.setText("Ver constancia");
         verConstancia.addActionListener(this::verConstanciaActionPerformed);
+
+        volver.setText("Volver");
+        volver.setToolTipText("");
+        volver.addActionListener(this::volverActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -170,8 +175,13 @@ public class VentanaMatriculas extends javax.swing.JFrame {
                 .addContainerGap(33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(registrarEstudiante)
-                .addGap(136, 136, 136))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(registrarEstudiante)
+                        .addGap(136, 136, 136))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(volver)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +195,9 @@ public class VentanaMatriculas extends javax.swing.JFrame {
                     .addComponent(matricular)
                     .addComponent(desmatricular)
                     .addComponent(verConstancia))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(volver)
+                .addContainerGap())
         );
 
         pack();
@@ -207,11 +219,16 @@ public class VentanaMatriculas extends javax.swing.JFrame {
         VentanaEstudiantes.nuevoEstudiante(kinder);
     }//GEN-LAST:event_registrarEstudianteActionPerformed
 
+    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_volverActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton desmatricular;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton matricular;
     private javax.swing.JButton registrarEstudiante;
     private javax.swing.JButton verConstancia;
+    private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

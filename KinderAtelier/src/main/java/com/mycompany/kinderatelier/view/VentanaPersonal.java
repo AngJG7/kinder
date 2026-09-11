@@ -120,6 +120,7 @@ public class VentanaPersonal extends javax.swing.JFrame {
         verFicha = new javax.swing.JButton();
         nuevoProfesor = new javax.swing.JButton();
         nuevoAdministrador = new javax.swing.JButton();
+        volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -142,6 +143,10 @@ public class VentanaPersonal extends javax.swing.JFrame {
 
         nuevoAdministrador.setText("Nuevo administrador");
         nuevoAdministrador.addActionListener(this::nuevoAdministradorActionPerformed);
+
+        volver.setText("Volver");
+        volver.setToolTipText("");
+        volver.addActionListener(this::volverActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,11 +171,14 @@ public class VentanaPersonal extends javax.swing.JFrame {
                         .addComponent(documentoTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(178, 178, 178)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(verFicha, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1)))
                 .addContainerGap(53, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addComponent(verFicha, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(volver)
+                .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,11 +195,17 @@ public class VentanaPersonal extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listaTrabajadores)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(verFicha, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(verFicha, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(28, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(volver)
+                        .addGap(15, 15, 15))))
         );
 
         pack();
@@ -216,6 +230,10 @@ public class VentanaPersonal extends javax.swing.JFrame {
         Lector.mostrar(kinder.listarPersonal());
     }//GEN-LAST:event_listaTrabajadoresActionPerformed
 
+    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_volverActionPerformed
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -227,5 +245,6 @@ public class VentanaPersonal extends javax.swing.JFrame {
     private javax.swing.JButton nuevoAdministrador;
     private javax.swing.JButton nuevoProfesor;
     private javax.swing.JButton verFicha;
+    private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

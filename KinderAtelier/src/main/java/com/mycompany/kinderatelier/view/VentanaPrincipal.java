@@ -68,6 +68,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 + "Profesor: 71234567 (no puede matricular)\n"
                 + "Sofia: 1098765432\n"
                 + "Mateo: 1087654321\n");
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.5f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.0f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.8f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.2f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 5.0f);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -120,10 +125,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(215, 215, 215)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(235, 235, 235)
-                        .addComponent(cargarDatosEjemplo)))
+                        .addComponent(jLabel2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
@@ -136,6 +138,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(Matriculas, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(72, 72, 72))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(235, 235, 235)
+                .addComponent(cargarDatosEjemplo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

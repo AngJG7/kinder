@@ -158,8 +158,10 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         verAcudiente = new javax.swing.JButton();
         verHistorial = new javax.swing.JButton();
         verNotas = new javax.swing.JButton();
+        asignarTalentoBtn = new javax.swing.JButton();
         generarHojaDeVida = new javax.swing.JButton();
         verDatos = new javax.swing.JButton();
+        volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,11 +185,18 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         verNotas.setText("Ver notas");
         verNotas.addActionListener(this::verNotasActionPerformed);
 
+        asignarTalentoBtn.setText("Asignar talento");
+        asignarTalentoBtn.addActionListener(this::asignarTalentoBtnActionPerformed);
+
         generarHojaDeVida.setText("Generar Hoja de Vida");
         generarHojaDeVida.addActionListener(this::generarHojaDeVidaActionPerformed);
 
         verDatos.setText("Ver Datos");
         verDatos.addActionListener(this::verDatosActionPerformed);
+
+        volver.setText("Volver");
+        volver.setToolTipText("");
+        volver.addActionListener(this::volverActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,7 +221,9 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(generarHojaDeVida)
-                        .addGap(253, 253, 253))
+                        .addGap(171, 171, 171)
+                        .addComponent(volver)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -224,6 +235,8 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
                         .addComponent(verHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(verNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(asignarTalentoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(58, 58, 58))))
         );
         layout.setVerticalGroup(
@@ -244,10 +257,15 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
                     .addComponent(verHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(verNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(verAcudiente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(verDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(verDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(asignarTalentoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addComponent(generarHojaDeVida)
                 .addGap(18, 18, 18))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(volver)
+                .addContainerGap())
         );
 
         pack();
@@ -292,12 +310,21 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_verDatosActionPerformed
 
+    private void asignarTalentoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asignarTalentoBtnActionPerformed
+        asignarTalento();
+    }//GEN-LAST:event_asignarTalentoBtnActionPerformed
+
     private void generarHojaDeVidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarHojaDeVidaActionPerformed
         hojaDeVida();
     }//GEN-LAST:event_generarHojaDeVidaActionPerformed
 
+    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_volverActionPerformed
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton asignarTalentoBtn;
     private javax.swing.JTextField documentoEstudiantes;
     private javax.swing.JButton generarHojaDeVida;
     private javax.swing.JLabel jLabel1;
@@ -308,5 +335,6 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
     private javax.swing.JButton verHistorial;
     private javax.swing.JButton verListaEstudiantes;
     private javax.swing.JButton verNotas;
+    private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

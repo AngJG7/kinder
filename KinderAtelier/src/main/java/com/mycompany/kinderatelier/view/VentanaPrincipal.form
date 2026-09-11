@@ -33,10 +33,6 @@
                       <EmptySpace min="-2" pref="215" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="235" max="-2" attributes="0"/>
-                      <Component id="cargarDatosEjemplo" min="-2" max="-2" attributes="0"/>
-                  </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -53,6 +49,11 @@
               <EmptySpace pref="69" max="32767" attributes="0"/>
               <Component id="Matriculas" min="-2" pref="125" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="235" max="-2" attributes="0"/>
+              <Component id="cargarDatosEjemplo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

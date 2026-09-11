@@ -47,7 +47,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="generarHojaDeVida" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="253" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="171" max="-2" attributes="0"/>
+                      <Component id="volver" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jSeparator1" min="-2" pref="644" max="-2" attributes="0"/>
@@ -61,6 +63,8 @@
                       <Component id="verHistorial" min="-2" pref="114" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="verNotas" min="-2" pref="98" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                      <Component id="asignarTalentoBtn" min="-2" pref="140" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -87,10 +91,16 @@
                   <Component id="verNotas" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                   <Component id="verAcudiente" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                   <Component id="verDatos" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                  <Component id="asignarTalentoBtn" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
               <Component id="generarHojaDeVida" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="volver" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -149,6 +159,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="verNotasActionPerformed"/>
       </Events>
     </Component>
+    <Component class="javax.swing.JButton" name="asignarTalentoBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Asignar talento"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="asignarTalentoBtnActionPerformed"/>
+      </Events>
+    </Component>
     <Component class="javax.swing.JButton" name="generarHojaDeVida">
       <Properties>
         <Property name="text" type="java.lang.String" value="Generar Hoja de Vida"/>
@@ -163,6 +181,15 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="verDatosActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="volver">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Volver"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="volverActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

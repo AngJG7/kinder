@@ -50,6 +50,10 @@ public class Principal {
                 agregarNotasEstudiante(kinder);
             } else if (opcion == 13) {
                 aplicarDescuento(kinder);
+            } else if (opcion == 14) {
+                modificarNotaEstudiante(kinder);
+            } else if (opcion == 15) {
+                consultarNotasEstudiante(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -75,6 +79,8 @@ public class Principal {
                11. Consultar los 10 Mejores
                12. Agregar Notas por estudiante
                13. Aplicar Descuentos de Honor
+               14. Modificar Nota
+               15. Consultar Notas
                 0. Salir
 
                Digite una opcion:""";
@@ -353,6 +359,55 @@ public class Principal {
     }
     public static void aplicarDescuento(KinderAtelier kinder) {
         kinder.aplicarDescuentoMejores10();
+    }
+    public static void modificarNotaEstudiante(KinderAtelier kinder) {
+        String docProfesor = Lector.leerTexto("Ingrese el documento del profesor:");
+        if (docProfesor.isEmpty()) return;
+
+        Profesor profesor = kinder.buscarProfesor(docProfesor);
+        if (profesor == null) {
+            Lector.mostrar("Profesor no encontrado (o el documento no pertenece a un docente).");
+            return;
+        }
+
+        String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
+        if (docEstudiante.isEmpty()) return;
+
+        Estudiante estudiante = kinder.buscarEstudiante(docEstudiante);
+        if (estudiante == null) {
+            Lector.mostrar("Estudiante no encontrado.");
+            return;
+        }
+
+        int posicion = Lector.leerEntero("Ingrese el numero de la nota a cambiar (1 a 5):");
+        float nuevaNota = Lector.leerFloat("Ingrese la nueva nota (0.0 a 5.0):");
+        if (profesor.modificarNotaEstudiante(estudiante, posicion, nuevaNota)) {
+            Lector.mostrar("Nota modificada con exito.");
+        } else {
+            Lector.mostrar("No se pudo modificar la nota (posicion o valor invalido).");
+        }
+    }
+    public static void consultarNotasEstudiante(KinderAtelier kinder) {
+        String docProfesor = Lector.leerTexto("Ingrese el documento del profesor:");
+        if (docProfesor.isEmpty()) return;
+
+        Profesor profesor = kinder.buscarProfesor(docProfesor);
+        if (profesor == null) {
+            Lector.mostrar("Profesor no encontrado (o el documento no pertenece a un docente).");
+            return;
+        }
+
+        String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
+        if (docEstudiante.isEmpty()) return;
+
+        Estudiante estudiante = kinder.buscarEstudiante(docEstudiante);
+        if (estudiante == null) {
+            Lector.mostrar("Estudiante no encontrado.");
+            return;
+        }
+
+        Lector.mostrar(profesor.verNotasEstudiante(estudiante) + "\n"
+                + profesor.obtenerPromedioEstudiante(estudiante));
     }
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;
