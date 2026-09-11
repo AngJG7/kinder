@@ -6,10 +6,6 @@ package com.mycompany.kinderatelier.programa;
 
 import com.mycompany.kinderatelier.lectura.Lector;
 
-
-/*Para mi programa, la función de matricula requería de la condición que no podía ser un profesor quien matriculase
-entonces construí bastante de las otras funciones para que la matricula me quedase completa */
-
 /**
  *
  * @author Ángela
@@ -47,12 +43,13 @@ public class Principal {
                 consultarConstancia(kinder);
             } else if (opcion == 0) {
                 salir = true;
-                Lector.mostrar("Hasta pronto!");
+                Lector.mostrar("Hasta pronto.");
             } else {
-                Lector.mostrar("Opcion invalida, elija un numero del menu");
+                Lector.mostrar("Opcion invalida. Elija un numero del menu.");
             }
         }
     }
+
     static String menu() {
         return """
                ===== KINDER ATELIER =====
@@ -71,6 +68,7 @@ public class Principal {
  
                Digite una opcion:""";
     }
+
     static void registrarEstudiante(KinderAtelier kinder) {
         Estudiante nuevo;
         String documento;
@@ -83,10 +81,14 @@ public class Principal {
         String alergias;
         String habilidades;
         String direccion;
-        String nombreAcudiente;
-        String documentoAcudiente;
-        String parentesco;
-        String telefonoAcudiente;
+        
+        /*Nuevas variables para ambos padres*/
+        String nombrePadre;
+        String documentoPadre;
+        String telefonoPadre;
+        String nombreMadre;
+        String documentoMadre;
+        String telefonoMadre;
  
         documento = Lector.leerTexto("Documento del estudiante:");
         if (documento.isEmpty()) {
@@ -95,7 +97,7 @@ public class Principal {
         }
         // reviso de una si ya existe, para no hacer llenar todo al pedo
         if (kinder.buscarEstudiante(documento) != null) {
-            Lector.mostrar("Ya existe un estudiante con ese documento!");
+            Lector.mostrar("Ya existe un estudiante con ese documento.");
             return;
         }
  
@@ -109,15 +111,21 @@ public class Principal {
         habilidades = Lector.leerTexto("Habilidades artisticas que muestra:");
         direccion = Lector.leerTexto("Direccion:");
  
-        nombreAcudiente = Lector.leerTexto("Nombre del acudiente:");
-        documentoAcudiente = Lector.leerTexto("Documento del acudiente:");
-        parentesco = Lector.leerTexto("Parentesco (Madre, Padre, etc.):");
-        telefonoAcudiente = Lector.leerTexto("Telefono del acudiente:");
+        // Datos del Padre
+        nombrePadre = Lector.leerTexto("Nombre del padre:");
+        documentoPadre = Lector.leerTexto("Documento del padre:");
+        telefonoPadre = Lector.leerTexto("Telefono del padre:");
+        
+        // Datos de la Madre
+        nombreMadre = Lector.leerTexto("Nombre de la madre:");
+        documentoMadre = Lector.leerTexto("Documento de la madre:");
+        telefonoMadre = Lector.leerTexto("Telefono de la madre:");
  
+        // Constructor actualizado
         nuevo = new Estudiante(documento, nombres, apellidos, telefono, eps,
                 fechaNacimiento, tipoSangre, alergias, habilidades, direccion,
-                nombreAcudiente, documentoAcudiente, parentesco,
-                telefonoAcudiente);
+                nombrePadre, documentoPadre, telefonoPadre,
+                nombreMadre, documentoMadre, telefonoMadre);
  
         if (kinder.agregarEstudiante(nuevo)) {
             Lector.mostrar("Estudiante registrado:\n\n" + nuevo.mostrarDatos());
@@ -125,6 +133,7 @@ public class Principal {
             Lector.mostrar(kinder.getUltimoMensaje());
         }
     }
+
     static void registrarEmpleado(KinderAtelier kinder) {
         Empleado nuevo;
         String documento;
@@ -178,6 +187,7 @@ public class Principal {
             Lector.mostrar(kinder.getUltimoMensaje());
         }
     }
+
     static void matricular(KinderAtelier kinder) {
         Empleado quien;
         Estudiante estudiante;
@@ -213,6 +223,7 @@ public class Principal {
                     + nueva.mostrarDatos());
         }
     }
+
     static void desmatricular(KinderAtelier kinder) {
         Empleado quien;
         String documento;
@@ -230,7 +241,7 @@ public class Principal {
         Lector.mostrar(kinder.getUltimoMensaje());
     }
  
-     static void consultarTaller(KinderAtelier kinder) {
+    static void consultarTaller(KinderAtelier kinder) {
         String taller;
  
         taller = elegirTaller(kinder, "De cual taller quiere ver la lista?");
@@ -243,7 +254,7 @@ public class Principal {
         documento = Lector.leerTexto("Documento del estudiante:");
         opcion = Lector.leerEntero("""
                                    Que desea consultar?
-                                   1. Datos del acudiente
+                                   1. Datos de los acudientes
                                    2. Historial de matriculas""");
         if (opcion == 1) {
             Lector.mostrar(kinder.consultarAcudiente(documento));
@@ -253,11 +264,13 @@ public class Principal {
             Lector.mostrar("Opcion invalida.");
         }
     }
+
     static void consultarConstancia(KinderAtelier kinder) {
         int numero;
         numero = Lector.leerEntero("Numero de la matricula:");
         Lector.mostrar(kinder.generarConstancia(numero));
     }
+
     static Empleado pedirEmpleado(KinderAtelier kinder) {
         Empleado empleado;
         String documento;
@@ -270,6 +283,7 @@ public class Principal {
         }
         return empleado;
     }
+
     static Estudiante pedirEstudiante(KinderAtelier kinder) {
         Estudiante estudiante;
         String documento;
@@ -282,6 +296,7 @@ public class Principal {
         }
         return estudiante;
     }
+
     static String elegirTaller(KinderAtelier kinder, String mensaje) {
         String lista;
         int eleccion;
@@ -299,32 +314,36 @@ public class Principal {
  
         return KinderAtelier.RAMAS[eleccion - 1];
     }
+
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;
         Profesor profesorMusica;
         Estudiante sofia;
         Estudiante mateo;
  
-        secretaria = new Empleado("435", "Luz Marina", "Ospina",
+        secretaria = new Empleado("43567890", "Luz Marina", "Ospina",
                 "3105558899", "Sura", "EMP-01", "Secretaria academica",
                 2200000.0, "01/02/2020");
  
-        profesorMusica = new Profesor("712", "Carlos", "Restrepo",
+        profesorMusica = new Profesor("71234567", "Carlos", "Restrepo",
                 "3009991122", "Nueva EPS", "EMP-03", 2600000.0, "15/01/2022",
                 "Licenciado en Musica", "Musica");
  
         kinder.agregarEmpleado(secretaria);
         kinder.agregarEmpleado(profesorMusica);
  
-        sofia = new Estudiante("109", "Sofia", "Gomez Ruiz",
+        /* Datos de ejemplo actualizados con los dos padres */
+        sofia = new Estudiante("1098765432", "Sofia", "Gomez Ruiz",
                 "3201234567", "Sura", "12/03/2022", "O+", "",
                 "Canta y baila todo el dia", "Calle 45 # 30-12",
-                "Ana Ruiz Molina", "431", "Madre", "3201234567");
+                "Carlos Gomez", "11223344", "3209876543", // Datos Padre
+                "Ana Ruiz Molina", "43112233", "3201234567"); // Datos Madre
  
-        mateo = new Estudiante("108", "Mateo", "Alvarez Diaz",
+        mateo = new Estudiante("1087654321", "Mateo", "Alvarez Diaz",
                 "3117654321", "Savia Salud", "08/07/2021", "A+", "Mani",
                 "Dibuja muy bien", "Carrera 50 # 12-04",
-                "Jorge Alvarez Pena", "714", "Padre", "3117654321");
+                "Jorge Alvarez Pena", "71445566", "3117654321", // Datos Padre
+                "Maria Diaz", "43215678", "3101234567"); // Datos Madre
  
         kinder.agregarEstudiante(sofia);
         kinder.agregarEstudiante(mateo);
@@ -336,15 +355,14 @@ public class Principal {
                        Datos de ejemplo cargados:
  
                        EMPLEADOS
-                       - Luz Marina Ospina, doc. 435 (administrativa)
-                       - Carlos Restrepo, doc. 712 (profesor de musica)
+                       - Luz Marina Ospina, doc. 43567890 (administrativa)
+                       - Carlos Restrepo, doc. 71234567 (profesor de musica)
  
                        ESTUDIANTES (ya matriculados)
-                       - Sofia Gomez Ruiz, doc. 109 - Musica y Danza
-                       - Mateo Alvarez Diaz, doc. 108 - Plastica y Teatro
+                       - Sofia Gomez Ruiz, doc. 1098765432 - Musica y Danza
+                       - Mateo Alvarez Diaz, doc. 1087654321 - Plastica y Teatro
  
-                       Use el documento 435 para matricular.
-                       Pruebe con 712 para ver el rechazo.""");
+                       Use el documento 43567890 para matricular.
+                       Pruebe con 71234567 para ver el rechazo.""");
     }
 }
- 

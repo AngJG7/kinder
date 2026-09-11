@@ -37,6 +37,7 @@ public class KinderAtelier {
     private int cantidadMatriculas;
     private int consecutivo;
     private String ultimoMensaje;
+
     public KinderAtelier(String dNombre, String dNit, String dFechaActual) {
         nombre = dNombre;
         nit = dNit;
@@ -56,10 +57,11 @@ public class KinderAtelier {
     public String getNombre() {
         return nombre;
     }
-    // El kinder no imprime: guarda el mensaje y quien lo llama lo muestra
+
     public String getUltimoMensaje() {
         return ultimoMensaje;
     }
+
     public boolean agregarEstudiante(Estudiante nuevo) {
         if (cantidadEstudiantes >= MAX_REGISTROS) {
             ultimoMensaje = "No hay espacio para mas estudiantes";
@@ -73,6 +75,7 @@ public class KinderAtelier {
         cantidadEstudiantes++;
         return true;
     }
+
     public boolean agregarEmpleado(Empleado nuevo) {
         if (cantidadEmpleados >= MAX_REGISTROS) {
             ultimoMensaje = "No hay espacio para mas empleados";
@@ -88,122 +91,120 @@ public class KinderAtelier {
     }
 
     public Estudiante buscarEstudiante(String documento) {
-        Estudiante encontrado;
-
-        encontrado = null;
+        Estudiante encontrado = null;
         for (int i = 0; i < cantidadEstudiantes; i++) {
             if (estudiantes[i].getDocumento().equals(documento)) {
                 encontrado = estudiantes[i];
             }
-        }return encontrado;
+        }
+        return encontrado;
     }
-    public Empleado buscarEmpleado(String documento) {
-        Empleado encontrado;
 
-        encontrado = null;
+    public Empleado buscarEmpleado(String documento) {
+        Empleado encontrado = null;
         for (int i = 0; i < cantidadEmpleados; i++) {
             if (empleados[i].getDocumento().equals(documento)) {
                 encontrado = empleados[i];
             }
-        }return encontrado;
+        }
+        return encontrado;
     }
-    public Matricula buscarMatriculaActiva(String documento) {
-        Matricula encontrada;
 
-        encontrada = null;
+    public Matricula buscarMatriculaActiva(String documento) {
+        Matricula encontrada = null;
         for (int i = 0; i < cantidadMatriculas; i++) {
             if (matriculas[i].getEstudiante().getDocumento().equals(documento)
                     && matriculas[i].estaActiva()
                     && matriculas[i].getAnioLectivo() == ANIO_LECTIVO) {
                 encontrada = matriculas[i];
             }
-        }return encontrada;
+        }
+        return encontrada;
     }
-    public Matricula buscarMatricula(int numero) {
-        Matricula encontrada;
 
-        encontrada = null;
+    public Matricula buscarMatricula(int numero) {
+        Matricula encontrada = null;
         for (int i = 0; i < cantidadMatriculas; i++) {
             if (matriculas[i].getNumero() == numero) {
                 encontrada = matriculas[i];
             }
-        }return encontrada;
+        }
+        return encontrada;
     }
-    public int indiceRama(String rama) {  //cda rama asociada a un indice
+
+    public int indiceRama(String rama) {
         for (int i = 0; i < RAMAS.length; i++) {
             if (RAMAS[i].equals(rama)) {
                 return i;
             }
-        }return -1;
+        }
+        return -1;
     }
+
     public boolean esRamaValida(String rama) {
         return indiceRama(rama) != -1;
     }
-    public String listarActividades(String rama) {  // Actividades por rama 
+
+    public String listarActividades(String rama) {
         String reporte;
-        int indice;
-        indice = indiceRama(rama);
+        int indice = indiceRama(rama);
         if (indice == -1) {
             return "La rama " + rama + " no existe en este kinder\n";
         }
         reporte = "Actividades de " + rama + ":\n";
         for (int i = 0; i < ACTIVIDADES[indice].length; i++) {
             reporte = reporte + "- " + ACTIVIDADES[indice][i] + "\n";
-        }return reporte;
+        }
+        return reporte;
     }
+
     public String listarTodasLasRamas() {
-        String reporte;
-        reporte = "TALLERES ARTISTICOS DISPONIBLES\n";
+        String reporte = "TALLERES ARTISTICOS DISPONIBLES\n";
         for (int i = 0; i < RAMAS.length; i++) {
             reporte = reporte + "\n" + listarActividades(RAMAS[i]);
-        }return reporte;
+        }
+        return reporte;
     }
+
     public int contarPorRama(String rama) {
-        int contador;
-        contador = 0;
+        int contador = 0;
         for (int i = 0; i < cantidadMatriculas; i++) {
-            if (matriculas[i].estaActiva()
-                    && matriculas[i].estaEnRama(rama)) {
+            if (matriculas[i].estaActiva() && matriculas[i].estaEnRama(rama)) {
                 contador = contador + 1;
             }
-        }return contador;
+        }
+        return contador;
     }
 
     public boolean hayCupo(String rama) {
         return contarPorRama(rama) < CUPO_POR_RAMA;
     }
+
     public boolean edadValida(Estudiante estudiante) {
-        int edad;
-        edad = estudiante.calcularEdad();
+        int edad = estudiante.calcularEdad();
         return edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA;
     }
-    // proceso de matrícula como tal
-    public Matricula matricular(Estudiante estudiante, String[] ramasElegidas,
-                                Empleado quien) {
+
+    public Matricula matricular(Estudiante estudiante, String[] ramasElegidas, Empleado quien) {
         Matricula nueva;
-        // Solo el personal administrativo matricula
         if (!quien.esAdministrativo()) {
             ultimoMensaje = "Solo el personal administrativo puede matricular";
             return null;
         }
-        // El estudiante debe estar registrado
         if (buscarEstudiante(estudiante.getDocumento()) == null) {
             ultimoMensaje = "El estudiante no esta registrado en el sistema";
             return null;
         }
-        // No puede tener otra matricula activa
         if (buscarMatriculaActiva(estudiante.getDocumento()) != null) {
             ultimoMensaje = "El estudiante ya tiene una matricula activa";
             return null;
         }
-        // La edad debe estar en el rango del kinder
         if (!edadValida(estudiante)) {
             ultimoMensaje = "La edad (" + estudiante.calcularEdad()
                     + ") esta fuera del rango: " + EDAD_MINIMA
                     + " a " + EDAD_MAXIMA + " anios";
             return null;
         }
-        // Debe elegir entre 1 y MAX_RAMAS talleres
         if (ramasElegidas.length == 0) {
             ultimoMensaje = "Debe elegir al menos un taller";
             return null;
@@ -213,7 +214,6 @@ public class KinderAtelier {
                     + " talleres por estudiante";
             return null;
         }
-        // Cada taller debe existir y tener cupo
         for (int i = 0; i < ramasElegidas.length; i++) {
             if (!esRamaValida(ramasElegidas[i])) {
                 ultimoMensaje = "El taller " + ramasElegidas[i]
@@ -238,7 +238,7 @@ public class KinderAtelier {
                 + " registrada en: " + nueva.listarRamas();
         return nueva;
     }
-// busca por documento
+
     public boolean desmatricular(String documento, String motivo, String fechaRetiro, Empleado quien) {
         Matricula matricula;
         if (!quien.esAdministrativo()) {
@@ -255,7 +255,99 @@ public class KinderAtelier {
                 + matricula.listarRamas() + ". Cupos liberados.";
         return true;
     }
-// datos (informes)
+
+    /*--- GESTIÓN DE NOTAS EN EL SISTEMA ---*/
+
+    public boolean agregarNotaEstudiante(String docProfesor, String docEstudiante, float nota) {
+        Empleado emp = buscarEmpleado(docProfesor);
+        if (emp == null) {
+            ultimoMensaje = "No existe un empleado con el documento " + docProfesor;
+            return false;
+        }
+        if (!(emp instanceof Profesor)) {
+            ultimoMensaje = "El empleado con documento " + docProfesor + " no es un profesor";
+            return false;
+        }
+
+        Estudiante est = buscarEstudiante(docEstudiante);
+        if (est == null) {
+            ultimoMensaje = "No existe un estudiante con el documento " + docEstudiante;
+            return false;
+        }
+
+        Profesor prof = (Profesor) emp;
+        if (prof.agregarNotaAEstudiante(est, nota)) {
+            ultimoMensaje = "Nota " + nota + " registrada exitosamente a " + est.getNombreCompleto();
+            return true;
+        } else {
+            ultimoMensaje = "No se pudo registrar la nota. Verifique que la nota este entre 0.0 y 5.0 y que el estudiante no tenga ya 5 notas.";
+            return false;
+        }
+    }
+
+    public boolean modificarNotaEstudiante(String docProfesor, String docEstudiante, int posicion, float nuevaNota) {
+        Empleado emp = buscarEmpleado(docProfesor);
+        if (emp == null) {
+            ultimoMensaje = "No existe un empleado con el documento " + docProfesor;
+            return false;
+        }
+        if (!(emp instanceof Profesor)) {
+            ultimoMensaje = "El empleado con documento " + docProfesor + " no es un profesor";
+            return false;
+        }
+
+        Estudiante est = buscarEstudiante(docEstudiante);
+        if (est == null) {
+            ultimoMensaje = "No existe un estudiante con el documento " + docEstudiante;
+            return false;
+        }
+
+        Profesor prof = (Profesor) emp;
+        if (prof.modificarNotaEstudiante(est, posicion, nuevaNota)) {
+            ultimoMensaje = "Nota " + posicion + " modificada a " + nuevaNota + " para " + est.getNombreCompleto();
+            return true;
+        } else {
+            ultimoMensaje = "No se pudo modificar la nota. Verifique la posicion (1 a 5) y que la nueva nota este entre 0.0 y 5.0.";
+            return false;
+        }
+    }
+
+    public String consultarNotasEstudiante(String docProfesor, String docEstudiante) {
+        Empleado emp = buscarEmpleado(docProfesor);
+        if (emp == null) {
+            return "No existe un empleado con el documento " + docProfesor;
+        }
+        if (!(emp instanceof Profesor)) {
+            return "El empleado con documento " + docProfesor + " no es un profesor";
+        }
+
+        Estudiante est = buscarEstudiante(docEstudiante);
+        if (est == null) {
+            return "No existe un estudiante con el documento " + docEstudiante;
+        }
+
+        Profesor prof = (Profesor) emp;
+        return prof.verNotasEstudiante(est);
+    }
+
+    public String calcularPromedioEstudiante(String docProfesor, String docEstudiante) {
+        Empleado emp = buscarEmpleado(docProfesor);
+        if (emp == null) {
+            return "No existe un empleado con el documento " + docProfesor;
+        }
+        if (!(emp instanceof Profesor)) {
+            return "El empleado con documento " + docProfesor + " no es un profesor";
+        }
+
+        Estudiante est = buscarEstudiante(docEstudiante);
+        if (est == null) {
+            return "No existe un estudiante con el documento " + docEstudiante;
+        }
+
+        Profesor prof = (Profesor) emp;
+        return prof.obtenerPromedioEstudiante(est);
+    }
+
     public String listarPorRama(String rama) {
         String reporte;
         if (!esRamaValida(rama)) {
@@ -270,8 +362,10 @@ public class KinderAtelier {
                         + matriculas[i].getEstudiante().getNombreCompleto()
                         + "\n";
             }
-        }return reporte;
+        }
+        return reporte;
     }
+
     public String mostrarOcupacion() {
         String reporte;
         int inscritos;
@@ -285,12 +379,13 @@ public class KinderAtelier {
                     + "/" + CUPO_POR_RAMA
                     + " (" + Math.round(porcentaje) + "% ocupado, "
                     + (CUPO_POR_RAMA - inscritos) + " cupos libres)\n";
-        }return reporte;
+        }
+        return reporte;
     }
+
     public String historialEstudiante(String documento) {
         String reporte;
-        Estudiante estudiante;
-        estudiante = buscarEstudiante(documento);
+        Estudiante estudiante = buscarEstudiante(documento);
         if (estudiante == null) {
             return "No existe un estudiante con documento " + documento + "\n";
         }
@@ -302,22 +397,23 @@ public class KinderAtelier {
                         + " | " + matriculas[i].listarRamas()
                         + " | " + matriculas[i].getEstado() + "\n";
             }
-        }return reporte;
+        }
+        return reporte;
     }
-    public String consultarAcudiente(String documento) {
-        Estudiante estudiante;
 
-        estudiante = buscarEstudiante(documento);
+    public String consultarAcudiente(String documento) {
+        Estudiante estudiante = buscarEstudiante(documento);
         if (estudiante == null) {
             return "No existe un estudiante con documento " + documento + "\n";
-        }return estudiante.mostrarAcudiente();
+        }
+        return estudiante.mostrarAcudiente();
     }
-    public String generarConstancia(int numero) {
-        Matricula matricula;
 
-        matricula = buscarMatricula(numero);
+    public String generarConstancia(int numero) {
+        Matricula matricula = buscarMatricula(numero);
         if (matricula == null) {
             return "No existe la matricula numero " + numero + "\n";
-        }return matricula.generarConstancia(nombre, nit);
+        }
+        return matricula.generarConstancia(nombre, nit);
     }
 }

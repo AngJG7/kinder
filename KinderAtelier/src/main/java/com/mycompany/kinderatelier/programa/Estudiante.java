@@ -4,6 +4,8 @@
  */
 package com.mycompany.kinderatelier.programa;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Ángela
@@ -11,20 +13,33 @@ package com.mycompany.kinderatelier.programa;
 public class Estudiante extends Persona {
     
     private static final int ANIO_ACTUAL = 2026;
+    private static final int MAX_NOTAS = 5;
+
     /*DATOS DEL ESTUDIANTE*/
     private String fechaNacimiento;  /*dd/mm/aaaa*/
     private String tipoSangre;
     private String alergias;
     private String habilidades;
     private String direccion;
-    /*DATOS DEL ACUDIENTE*/
-    private String nombreAcudiente;
-    private String documentoAcudiente;
-    private String parentesco;
-    private String telefonoAcudiente;
+
+    /*DATOS DEL ACUDIENTE PADRE*/
+    private String nombrePadre;
+    private String documentoPadre;
+    private String telefonoPadre;
     
-    public Estudiante(String dDocumento, String dNombres, String dApellidos, String dTelefono, String dEps, String dFechaNacimiento, String dTipoSangre, String dAlergias,
-                      String dHabilidades, String dDireccion, String dNombreAcudiente, String dDocumentoAcudiente, String dParentesco, String dTelefonoAcudiente){
+    /*DATOS DEL ACUDIENTE MADRE*/
+    private String nombreMadre;
+    private String documentoMadre;
+    private String telefonoMadre;
+
+    /*NOTAS*/
+    private ArrayList<Float> notas;
+
+    public Estudiante(String dDocumento, String dNombres, String dApellidos, String dTelefono, String dEps, 
+                      String dFechaNacimiento, String dTipoSangre, String dAlergias, String dHabilidades, 
+                      String dDireccion, String dNombrePadre, String dDocumentoPadre, String dTelefonoPadre, 
+                      String dNombreMadre, String dDocumentoMadre, String dTelefonoMadre) {
+        
         super(dDocumento, dNombres, dApellidos, dTelefono, dEps);
         fechaNacimiento = dFechaNacimiento;
         tipoSangre = dTipoSangre;
@@ -32,32 +47,90 @@ public class Estudiante extends Persona {
         habilidades = dHabilidades;
         direccion = dDireccion;
         
-        nombreAcudiente = dNombreAcudiente;
-        documentoAcudiente = dDocumentoAcudiente;
-        parentesco = dParentesco;
-        telefonoAcudiente = dTelefonoAcudiente;
+        nombrePadre = dNombrePadre;
+        documentoPadre = dDocumentoPadre;
+        telefonoPadre = dTelefonoPadre;
+        
+        nombreMadre = dNombreMadre;
+        documentoMadre = dDocumentoMadre;
+        telefonoMadre = dTelefonoMadre;
+
+        notas = new ArrayList<>();
     }
+    
+    /*MANEJO DE NOTAS*/
+    public ArrayList<Float> getNotas() {
+        return notas;
+    }
+
+    public boolean agregarNota(float nota) {
+        if (nota < 0.0f || nota > 5.0f) {
+            return false;
+        }
+        if (notas.size() >= MAX_NOTAS) {
+            return false;
+        }
+        return notas.add(nota);
+    }
+
+    public boolean modificarNota(int indice, float nuevaNota) {
+        if (nuevaNota < 0.0f || nuevaNota > 5.0f) {
+            return false;
+        }
+        if (indice < 0 || indice >= notas.size()) {
+            return false;
+        }
+        notas.set(indice, nuevaNota);
+        return true;
+    }
+
+    public double calcularPromedio() {
+        if (notas.size() < MAX_NOTAS) {
+            return -1.0;
+        }
+        double suma = 0;
+        for (float nota : notas) {
+            suma += nota;
+        }
+        return suma / MAX_NOTAS;
+    }
+
     public String getFechaNacimiento() {
         return fechaNacimiento;
     }
+
     public String getTipoSangre() {
         return tipoSangre;
     }
+
     public String getHabilidades() {
         return habilidades;
     }
-    public String getNombreAcudiente() {
-        return nombreAcudiente;
+    
+    public String getNombrePadre() {
+        return nombrePadre;
     }
-    public String getParentesco() {
-        return parentesco;
+
+    public String getDocumentoPadre() {
+        return documentoPadre;
     }
-    public String getTelefonoAcudiente() {
-        return telefonoAcudiente;
+
+    public String getTelefonoPadre() {
+        return telefonoPadre;
     }
-    public String getDocumentoAcudiente() {
-        return documentoAcudiente;
+
+    public String getNombreMadre() {
+        return nombreMadre;
     }
+
+    public String getDocumentoMadre() {
+        return documentoMadre;
+    }
+
+    public String getTelefonoMadre() {
+        return telefonoMadre;
+    }
+
     public int calcularEdad() {
         int anioNacimiento;
         int edad;
@@ -65,22 +138,29 @@ public class Estudiante extends Persona {
         edad = (ANIO_ACTUAL - anioNacimiento);
         return edad;
     }
+
     public String mostrarAcudiente() {
         String datos;
         datos = """
-                ======= ACUDIENTE RESPONSABLE ======
+                ======= ACUDIENTES RESPONSABLES ======
                 Estudiante: """ + getNombreCompleto() + " (doc. " + documento + ")\n"
-                + "Acudiente: " + nombreAcudiente + "\n"
-                + "Documento: " + documentoAcudiente + "\n"
-                + "Parentesco: " + parentesco + "\n"
-                + "Telefono: " + telefonoAcudiente + "\n";
+                + "--- Datos del Padre ---\n"
+                + "Nombre: " + nombrePadre + "\n"
+                + "Documento: " + documentoPadre + "\n"
+                + "Telefono: " + telefonoPadre + "\n"
+                + "--- Datos de la Madre ---\n"
+                + "Nombre: " + nombreMadre + "\n"
+                + "Documento: " + documentoMadre + "\n"
+                + "Telefono: " + telefonoMadre + "\n";
         return datos;
     }
 
+    @Override
     public String mostrarDatos(){
         String datos;
         String textoAlergias;
         String textoHabilidades;
+        
         if (alergias.isEmpty()) {
             textoAlergias = "ninguna reportada";
         } else {
@@ -91,6 +171,7 @@ public class Estudiante extends Persona {
         } else {
             textoHabilidades = habilidades;
         }
+        
         datos = """
                 ======= ESTUDIANTE =======
                 Documento: """ + documento + "\n"
@@ -103,8 +184,8 @@ public class Estudiante extends Persona {
                 + "Habilidades: " + textoHabilidades + "\n"
                 + "Direccion: " + direccion + "\n"
                 + "Telefono: " + telefono + "\n"
-                + "Acudiente: " + nombreAcudiente + " (" + parentesco + ")\n"
-                + "Tel. acudiente: " + telefonoAcudiente + "\n";
+                + "Padre: " + nombrePadre + " (Tel. " + telefonoPadre + ")\n"
+                + "Madre: " + nombreMadre + " (Tel. " + telefonoMadre + ")\n";
         return datos;
     }
 }

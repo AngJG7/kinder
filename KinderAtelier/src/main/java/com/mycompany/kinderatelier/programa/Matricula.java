@@ -35,30 +35,39 @@ public class Matricula {
         ramas = new String[MAX_RAMAS];
         cantidadRamas = 0;
     }
+
     public int getNumero() {
         return numero;
     }
+
     public String getFecha() {
         return fecha;
     }
+
     public int getAnioLectivo() {
         return anioLectivo;
     }
+
     public String getEstado() {
         return estado;
     }
+
     public double getValor() {
         return valor;
     }
+
     public Estudiante getEstudiante() {
         return estudiante;
     }
+
     public int getCantidadRamas() {
         return cantidadRamas;
     }
+
     public boolean estaActiva() {
         return estado.equals("activa");
     }
+
     public boolean inscribirRama(String rama) {
         if (cantidadRamas >= MAX_RAMAS) {
             return false;
@@ -70,13 +79,16 @@ public class Matricula {
         cantidadRamas = cantidadRamas + 1;
         return true;
     }
+
     public boolean estaEnRama(String rama) {
         for (int i = 0; i < cantidadRamas; i++) {
             if (ramas[i].equals(rama)) {
                 return true;
             }
-        }return false;
+        }
+        return false;
     }
+
     public String listarRamas() {
         String texto;
 
@@ -86,8 +98,10 @@ public class Matricula {
         texto = ramas[0];
         for (int i = 1; i < cantidadRamas; i++) {
             texto = texto + ", " + ramas[i];
-        } return texto;
+        } 
+        return texto;
     }
+
     public boolean retirar(String pMotivo, String pFechaRetiro) {
         if (!estaActiva()) {
             return false;
@@ -97,6 +111,7 @@ public class Matricula {
         fechaRetiro = pFechaRetiro;
         return true;
     }
+
     public String mostrarDatos() {
         String datos;
 
@@ -110,8 +125,8 @@ public class Matricula {
                 + "Ramas artisticas: " + listarRamas() + "\n"
                 + "Estudiante: " + estudiante.getNombreCompleto()
                         + " (doc. " + estudiante.getDocumento() + ")\n"
-                + "Acudiente responsable: " + estudiante.getNombreAcudiente()
-                        + " - " + estudiante.getParentesco() + "\n"
+                + "Padre responsable: " + estudiante.getNombrePadre() + "\n"
+                + "Madre responsable: " + estudiante.getNombreMadre() + "\n"
                 + "Registrada por: " + registradaPor.getNombreCompleto()
                         + " - " + registradaPor.getCargo() + "\n";
 
@@ -124,7 +139,7 @@ public class Matricula {
         return datos;
     }
     
-    /*Formateo de bloque de texto pq no salía bien*/
+    /*Formateo de bloque de texto actualizado para ambos padres*/
     public String generarConstancia(String nombreKinder, String nitKinder) {
         return """
                ================================================
@@ -132,9 +147,9 @@ public class Matricula {
                  %s - NIT %s
                ================================================
 
-               Senor(a) %s,
-               identificado(a) con documento %s,
-               en calidad de %s del estudiante:
+               Padre: %s (Doc. %s)
+               Madre: %s (Doc. %s)
+               en calidad de padres responsables del estudiante:
 
                   %s (doc. %s)
 
@@ -146,17 +161,24 @@ public class Matricula {
                   Valor:        $%.0f
                   Estado:       %s
 
-               Como acudiente responsable, usted es el contacto
-               autorizado para autorizaciones y retiros.
-               Telefono registrado: %s
+               Como acudientes responsables, ustedes son el 
+               contacto autorizado para autorizaciones y retiros.
+               Telefonos registrados:
+               Padre: %s
+               Madre: %s
                """.formatted(numero, nombreKinder, nitKinder,
-                             estudiante.getNombreAcudiente(),
-                             estudiante.getDocumentoAcudiente(),
-                             estudiante.getParentesco(),
+                             estudiante.getNombrePadre(),
+                             estudiante.getDocumentoPadre(),
+                             estudiante.getNombreMadre(),
+                             estudiante.getDocumentoMadre(),
                              estudiante.getNombreCompleto(),
-                             estudiante.getDocumento(), fecha,
-                             anioLectivo, listarRamas(), valor, estado,
-                             estudiante.getTelefonoAcudiente());
+                             estudiante.getDocumento(), 
+                             fecha, 
+                             anioLectivo, 
+                             listarRamas(), 
+                             valor, 
+                             estado,
+                             estudiante.getTelefonoPadre(),
+                             estudiante.getTelefonoMadre());
     }
-    
 }
