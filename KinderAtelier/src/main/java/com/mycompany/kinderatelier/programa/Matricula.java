@@ -1,22 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.kinderatelier.programa;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
-/**
- *
- * @author Ángela
- */
+
 public class Matricula {
     public static final int MAX_RAMAS = 3;
     private int numero;
     private String fecha;
     private int anioLectivo;
     private Double valor;
-    private String estado; /*puede ser activa o retirada*/
+    private String estado;
     private Estudiante estudiante;
     private Empleado registradaPor;
     private String motivoRetiro;
@@ -128,8 +121,7 @@ public class Matricula {
 
         return datos;
     }
-    
-    /*Formateo de bloque de texto pq no salía bien*/
+
     public String generarConstancia(String nombreKinder, String nitKinder) {
         return """
                ================================================
@@ -163,36 +155,33 @@ public class Matricula {
                              anioLectivo, listarRamas(), valor, estado,
                              estudiante.getTelefonoAcudiente());
     }
-    
+
     public String generarMatriculaPdf(String nombreKinder, String nitKinder){
         try {
             String nombreArchivo = "matricula_" + numero + ".pdf";
             Document doc = new Document();
             PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
             doc.open();
-            
-            
+
             Font font = FontFactory.getFont(BaseFont.TIMES_BOLD, 21, BaseColor.BLACK);
-            
-            
+
             Paragraph titulo = new Paragraph("Constancia Matricula "+estudiante.getDocumento(),font);
             titulo.setAlignment(Element.ALIGN_CENTER);
             doc.add(titulo);
-            
+
             doc.add(new Paragraph("\n\n"));
-            
+
             font = FontFactory.getFont(BaseFont.TIMES_ITALIC,12,BaseColor.BLACK);
-            
+
             Paragraph info = new Paragraph("Nombre: "+estudiante.getNombreCompleto()+"\nFecha de Nacimiento: "+estudiante.getFechaNacimiento()+"\nTipo de sangre: "+estudiante.getTipoSangre()+"\nAlergias: "+estudiante.getAlergias()+"\nHabilidades: "+estudiante.getHabilidades()+"\nDirección: "+estudiante.getADireccion(),font);
             doc.add(info);
-            
-            
+
             doc.close();
-            
+
         } catch (DocumentException | java.io.FileNotFoundException e){
             e.printStackTrace();
         }
         return "Cargando el documento...";
     }
-    
+
 }

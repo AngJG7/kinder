@@ -1,33 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.kinderatelier.programa;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Ángela
- */
 public class Estudiante extends Persona {
 
     private static final int ANIO_ACTUAL = 2026;
     private static final int MAX_NOTAS = 5;
-    /*DATOS DEL ESTUDIANTE*/
-    private String fechaNacimiento;  /*dd/mm/aaaa*/
+
+    private String fechaNacimiento;
     private String tipoSangre;
     private String alergias;
     private String habilidades;
-    private String talento;      /*deportivo, artistico, academico o social*/
+    private String talento;
     private String direccion;
-    private String patologias;   /*fisicas o mentales, solo aplica a menores de 3 anios (HU4)*/
-    /*DATOS DEL ACUDIENTE*/
+    private String patologias;
+
     private String nombreAcudiente;
     private String documentoAcudiente;
     private String parentesco;
     private String telefonoAcudiente;
-    /*NOTAS*/
+
     private ArrayList<Float> notas;
 
     public Estudiante(String dDocumento, String dNombres, String dApellidos, String dTelefono, String dEps, String dFechaNacimiento, String dTipoSangre, String dAlergias,
@@ -44,8 +36,8 @@ public class Estudiante extends Persona {
         parentesco = dParentesco;
         telefonoAcudiente = dTelefonoAcudiente;
 
-        talento = "";   // se asigna despues con setTalento, para no cambiar el constructor
-        patologias = "";   // se asigna despues con setPatologias, para no cambiar el constructor
+        talento = "";
+        patologias = "";
         notas = new ArrayList<>();
     }
     public ArrayList<Float> getNotas() {
@@ -104,12 +96,7 @@ public class Estudiante extends Persona {
     public void setPatologias(String dPatologias) {
         patologias = dPatologias;
     }
-    /**
-     * HU4: el informe de patologias fisicas/mentales solo aplica a
-     * menores de 3 anios. Hoy el kinder matricula de EDAD_MINIMA a
-     * EDAD_MAXIMA (4 a 5), asi que en la practica esto queda listo
-     * para el dia que se ajuste ese rango, pero no se pide todavia.
-     */
+
     public boolean requierePatologias() {
         return calcularEdad() < 3;
     }
@@ -193,3 +180,4 @@ public class Estudiante extends Persona {
         return datos;
     }
 }
+

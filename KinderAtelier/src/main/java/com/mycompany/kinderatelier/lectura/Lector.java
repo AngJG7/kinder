@@ -1,14 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.kinderatelier.lectura;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Ángela
- */
 public class Lector {
     public static String leerTexto(String mensaje) {
         String ingreso;
@@ -41,7 +33,7 @@ public class Lector {
         while (!valido) {
             ingreso = leerTexto(mensaje);
             if (ingreso.isEmpty()) {
-                return -1; // Permite cancelar la operacion
+                return -1;
             }
             try {
                 numero = Float.parseFloat(ingreso);
@@ -70,3 +62,4 @@ public class Lector {
         }return true;
     }
 }
+

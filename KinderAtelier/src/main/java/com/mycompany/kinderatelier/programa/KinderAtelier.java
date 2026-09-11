@@ -1,17 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.kinderatelier.programa;
 import com.mycompany.kinderatelier.lectura.Lector;
 import java.util.Arrays;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
-/**
- *
- * @author Ángela
- */
+
 public class KinderAtelier {
     public static final int VALOR_DESCUENTO_MATRICULA = 250000;
     public static final int ANIO_LECTIVO = 2026;
@@ -63,7 +56,7 @@ public class KinderAtelier {
     public String getNombre() {
         return nombre;
     }
-    // El kinder no imprime: guarda el mensaje y quien lo llama lo muestra
+
     public String getUltimoMensaje() {
         return ultimoMensaje;
     }
@@ -146,7 +139,7 @@ public class KinderAtelier {
             }
         }return encontrada;
     }
-    public int indiceRama(String rama) {  //cda rama asociada a un indice
+    public int indiceRama(String rama) {
         for (int i = 0; i < RAMAS.length; i++) {
             if (RAMAS[i].equals(rama)) {
                 return i;
@@ -156,7 +149,7 @@ public class KinderAtelier {
     public boolean esRamaValida(String rama) {
         return indiceRama(rama) != -1;
     }
-    public String listarActividades(String rama) {  // Actividades por rama 
+    public String listarActividades(String rama) {
         String reporte;
         int indice;
         indice = indiceRama(rama);
@@ -194,33 +187,33 @@ public class KinderAtelier {
         edad = estudiante.calcularEdad();
         return edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA;
     }
-    // proceso de matrícula como tal
+
     public Matricula matricular(Estudiante estudiante, String[] ramasElegidas,
                                 Empleado quien) {
         Matricula nueva;
-        // Solo el personal administrativo matricula
+
         if (!quien.esAdministrativo()) {
             ultimoMensaje = "Solo el personal administrativo puede matricular";
             return null;
         }
-        // El estudiante debe estar registrado
+
         if (buscarEstudiante(estudiante.getDocumento()) == null) {
             ultimoMensaje = "El estudiante no esta registrado en el sistema";
             return null;
         }
-        // No puede tener otra matricula activa
+
         if (buscarMatriculaActiva(estudiante.getDocumento()) != null) {
             ultimoMensaje = "El estudiante ya tiene una matricula activa";
             return null;
         }
-        // La edad debe estar en el rango del kinder
+
         if (!edadValida(estudiante)) {
             ultimoMensaje = "La edad (" + estudiante.calcularEdad()
                     + ") esta fuera del rango: " + EDAD_MINIMA
                     + " a " + EDAD_MAXIMA + " anios";
             return null;
         }
-        // Debe elegir entre 1 y MAX_RAMAS talleres
+
         if (ramasElegidas.length == 0) {
             ultimoMensaje = "Debe elegir al menos un taller";
             return null;
@@ -230,7 +223,7 @@ public class KinderAtelier {
                     + " talleres por estudiante";
             return null;
         }
-        // Cada taller debe existir y tener cupo
+
         for (int i = 0; i < ramasElegidas.length; i++) {
             if (!esRamaValida(ramasElegidas[i])) {
                 ultimoMensaje = "El taller " + ramasElegidas[i]
@@ -255,7 +248,7 @@ public class KinderAtelier {
                 + " registrada en: " + nueva.listarRamas();
         return nueva;
     }
-// busca por documento
+
     public boolean desmatricular(String documento, String motivo, String fechaRetiro, Empleado quien) {
         Matricula matricula;
         if (!quien.esAdministrativo()) {
@@ -272,7 +265,7 @@ public class KinderAtelier {
                 + matricula.listarRamas() + ". Cupos liberados.";
         return true;
     }
-// datos (informes)
+
     public String listarPorRama(String rama) {
         String reporte;
         if (!esRamaValida(rama)) {
@@ -347,10 +340,6 @@ public class KinderAtelier {
         }
     }
 
-    /**
-     * Verifica que el talento este dentro de las categorias que maneja
-     * el kinder. Mismo criterio que esRamaValida con los talleres.
-     */
     public boolean esTalentoValido(String talento) {
         for (int i = 0; i < TALENTOS.length; i++) {
             if (TALENTOS[i].equals(talento)) {
@@ -359,11 +348,6 @@ public class KinderAtelier {
         }return false;
     }
 
-    /**
-     * Le asigna una categoria de talento a un estudiante ya registrado.
-     * Se hace aparte del registro porque el talento se identifica con el
-     * tiempo, observando al nino, no el primer dia.
-     */
     public boolean asignarTalento(String documento, String talento) {
         Estudiante estudiante;
         estudiante = buscarEstudiante(documento);
@@ -381,9 +365,6 @@ public class KinderAtelier {
         return true;
     }
 
-    /**
-     * Cuenta cuantos estudiantes tienen identificado un talento.
-     */
     public int contarPorTalento(String talento) {
         int contador;
         contador = 0;
@@ -394,10 +375,6 @@ public class KinderAtelier {
         }return contador;
     }
 
-    /**
-     * Lista los estudiantes de una categoria de talento, con el detalle
-     * que el acudiente reporto en habilidades.
-     */
     public String listarPorTalento(String talento) {
         String reporte;
         if (!esTalentoValido(talento)) {
@@ -418,11 +395,6 @@ public class KinderAtelier {
         }return reporte;
     }
 
-    /**
-     * Distribucion de los talentos en todo el kinder. Le sirve a la
-     * direccion para ver si el desarrollo de los ninos esta balanceado
-     * o si hay areas descuidadas.
-     */
     public String mostrarDistribucionTalentos() {
         String reporte;
         int conTalento;
@@ -454,11 +426,6 @@ public class KinderAtelier {
         }return reporte;
     }
 
-    /**
-     * Listado de todos los estudiantes registrados, con su talento y
-     * los talleres en los que esta matriculado. Los que aparecen como
-     * "sin matricular" estan registrados pero no inscritos todavia.
-     */
     public String listarEstudiantes() {
         String reporte;
         Matricula matricula;
@@ -481,10 +448,6 @@ public class KinderAtelier {
         }return reporte;
     }
 
-    /**
-     * Listado del personal, con cargo y taller asignado en el caso de
-     * los profesores.
-     */
     public String listarPersonal() {
         String reporte;
 
@@ -500,17 +463,10 @@ public class KinderAtelier {
         }return reporte;
     }
 
-    /**
-     * Devuelve el listado de los mejores estudiantes (hasta 10) ordenados
-     * de mayor a menor promedio. Solo considera estudiantes que ya tienen
-     * las MAX_NOTAS notas registradas (promedio distinto de -1).
-     * Esta función SOLO consulta y ordena: no aplica descuentos ni bonos.
-     */
     public Estudiante[] mejores10() {
-        // Copia solo las posiciones realmente usadas del arreglo
+
         Estudiante[] candidatos = Arrays.copyOf(estudiantes, cantidadEstudiantes);
 
-        // Bubble sort descendente por promedio
         for (int i = 0; i < candidatos.length - 1; i++) {
             for (int j = 0; j < candidatos.length - 1 - i; j++) {
                 if (candidatos[j].calcularPromedio() < candidatos[j + 1].calcularPromedio()) {
@@ -525,12 +481,6 @@ public class KinderAtelier {
         return Arrays.copyOfRange(candidatos, 0, cantidadFinal);
     }
 
-    /**
-     * Aplica el beneficio (descuento en matricula) a los estudiantes
-     * que estan en el listado de mejores10(). Es una accion explicita,
-     * separada de la consulta, para no reaplicar el beneficio cada vez
-     * que alguien solo quiere VER el listado.
-     */
     public void aplicarDescuentoMejores10() {
         Estudiante[] mejores = mejores10();
 
@@ -540,7 +490,6 @@ public class KinderAtelier {
             if (matricula != null && matricula.estaActiva()) {
                 boolean esTop10 = false;
 
-                // Verificamos si el estudiante de esta matricula pertenece al Top 10
                 for (Estudiante e : mejores) {
                     if (e != null && e.getDocumento().equals(matricula.getEstudiante().getDocumento())) {
                         esTop10 = true;
@@ -552,17 +501,13 @@ public class KinderAtelier {
                     matricula.setValor(VALOR_MATRICULA - VALOR_DESCUENTO_MATRICULA);
                     Lector.mostrar("Descuento aplicado/mantenido para: " + matricula.getEstudiante().getNombreCompleto());
                 } else {
-                    // Si salio del Top 10 o no pertenece, se restablece la tarifa plena
+
                     matricula.setValor(VALOR_MATRICULA);
                 }
             }
         }
     }
 
-    /**
-     * Genera el reporte PDF con el listado de los mejores estudiantes,
-     * siguiendo el mismo patron usado en Matricula.generarMatriculaPdf.
-     */
     public String generarMejores10Pdf() {
         Estudiante[] mejores = mejores10();
         String nombreArchivo = "mejores10.pdf";
@@ -571,19 +516,15 @@ public class KinderAtelier {
             PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
             doc.open();
 
-            // 1. Colores y fuentes corporativas
-            BaseColor azulOscuro = new BaseColor(30, 81, 123);
-            BaseColor grisTexto = new BaseColor(60, 60, 60);
+            BaseColor BLACK = new BaseColor(30, 81, 123);
 
-            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
-            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
-            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, azulOscuro);
-            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, grisTexto);
-            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, grisTexto);
-            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.GRAY);
+            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
+            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
-            // 2. Encabezado de la Institución
             Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
             pKinder.setAlignment(Element.ALIGN_CENTER);
             doc.add(pKinder);
@@ -592,20 +533,14 @@ public class KinderAtelier {
             pNit.setAlignment(Element.ALIGN_CENTER);
             pNit.setSpacingAfter(10);
             doc.add(pNit);
-
-            // Línea divisoria
-            Paragraph linea = new Paragraph("________________________________________________________________________", fontSubHeader);
+            Paragraph linea = new Paragraph("==================================", fontSubHeader);
             linea.setAlignment(Element.ALIGN_CENTER);
             linea.setSpacingAfter(15);
             doc.add(linea);
-
-            // 3. Título Principal
             Paragraph pTitulo = new Paragraph("CUADRO DE HONOR - 10 MEJORES ESTUDIANTES", fontTitulo);
             pTitulo.setAlignment(Element.ALIGN_CENTER);
             pTitulo.setSpacingAfter(20);
             doc.add(pTitulo);
-
-            // 4. Listado de Estudiantes
             if (mejores.length == 0) {
                 Paragraph pVacio = new Paragraph("No hay estudiantes registrados o con notas disponibles.", fontNormal);
                 pVacio.setAlignment(Element.ALIGN_CENTER);
@@ -616,17 +551,15 @@ public class KinderAtelier {
                     if (e == null) continue;
 
                     double promedio = e.calcularPromedio();
-                    String strPromedio = (promedio == -1.0) ? "Pendiente (menos de 5 notas)" : String.format("%.2f", promedio);
+                    String strPromedio = (promedio == -1.0) ? "Pendiente (tiene menos de 5 notas)" : String.format("%.2f", promedio);
 
                     Paragraph pItem = new Paragraph();
                     pItem.setLeading(16f);
 
-                    // Número de posición y Nombre Completo
                     pItem.add(new Chunk((i + 1) + ". ", fontSeccion));
                     pItem.add(new Chunk(e.getNombreCompleto(), fontBold));
                     pItem.add(new Chunk(" (Doc. " + e.getDocumento() + ")\n", fontNormal));
 
-                    // Promedio obtenido
                     pItem.add(new Chunk("    Promedio Académico: ", fontBold));
                     pItem.add(new Chunk(strPromedio + "\n", fontNormal));
 
@@ -634,16 +567,6 @@ public class KinderAtelier {
                     doc.add(pItem);
                 }
             }
-
-            // 5. Pie de página
-            Paragraph pie = new Paragraph(
-                "Reporte de excelencia académica generado automáticamente por " + nombre + ".",
-                fontPie
-            );
-            pie.setSpacingBefore(15);
-            pie.setAlignment(Element.ALIGN_CENTER);
-            doc.add(pie);
-
             doc.close();
             return "Reporte de mejores estudiantes generado exitosamente.\n";
 
@@ -660,7 +583,6 @@ public class KinderAtelier {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("================================================\n");
         sb.append("   MEJORES 10 ESTUDIANTES - ").append(nombre).append("\n");
         sb.append("================================================\n\n");
 
@@ -689,16 +611,10 @@ public class KinderAtelier {
         return sb.toString();
     }
 
-    /**
-     * HU3: Boletin de notas del estudiante, con las notas registradas,
-     * el promedio y los datos del grupo familiar (acudiente responsable).
-     * Se guarda con el documento en el nombre del archivo para que cada
-     * estudiante tenga su propio PDF y no se sobrescriban entre si.
-     */
     public String generarBoletinPdf(String documentoEstudiante) {
         Estudiante estudiante = buscarEstudiante(documentoEstudiante);
         if (estudiante == null) {
-            return "No existe un estudiante con documento " + documentoEstudiante + "\n";
+            return "No existe el estudiante con documento " + documentoEstudiante + "\n";
         }
 
         String nombreArchivo = "boletin_" + estudiante.getDocumento() + ".pdf";
@@ -710,13 +626,13 @@ public class KinderAtelier {
             BaseColor azulOscuro = new BaseColor(30, 81, 123);
             BaseColor grisTexto = new BaseColor(60, 60, 60);
 
-            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
-            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
-            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, azulOscuro);
-            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, grisTexto);
-            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, grisTexto);
-            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.GRAY);
+            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, BaseColor.BLACK);
+            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
+            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.BLACK);
 
             Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
             pKinder.setAlignment(Element.ALIGN_CENTER);
@@ -727,7 +643,7 @@ public class KinderAtelier {
             pNit.setSpacingAfter(10);
             doc.add(pNit);
 
-            Paragraph linea = new Paragraph("________________________________________________________________________", fontSubHeader);
+            Paragraph linea = new Paragraph("==================================", fontSubHeader);
             linea.setAlignment(Element.ALIGN_CENTER);
             linea.setSpacingAfter(15);
             doc.add(linea);
@@ -775,7 +691,7 @@ public class KinderAtelier {
 
             java.util.ArrayList<Float> notas = estudiante.getNotas();
             if (notas.isEmpty()) {
-                Paragraph pVacio = new Paragraph("Este estudiante no tiene notas registradas.", fontNormal);
+                Paragraph pVacio = new Paragraph("Este estudiante no tiene notas registradas", fontNormal);
                 doc.add(pVacio);
             } else {
                 for (int i = 0; i < notas.size(); i++) {
@@ -804,16 +720,8 @@ public class KinderAtelier {
                 pPatologias.setSpacingAfter(15);
                 doc.add(pPatologias);
             }
-
-            Paragraph pie = new Paragraph(
-                "Boletin generado automaticamente por " + nombre + ".",
-                fontPie
-            );
-            pie.setAlignment(Element.ALIGN_CENTER);
-            doc.add(pie);
-
             doc.close();
-            return "Boletin generado exitosamente.\n";
+            return "Boletin generado exitosamente!!\n";
 
         } catch (DocumentException | java.io.FileNotFoundException e) {
             e.printStackTrace();
@@ -821,3 +729,4 @@ public class KinderAtelier {
         }
     }
 }
+
