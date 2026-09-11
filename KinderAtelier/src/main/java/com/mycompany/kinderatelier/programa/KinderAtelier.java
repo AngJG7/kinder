@@ -648,6 +648,13 @@ public class KinderAtelier {
                 doc2.add(enfermedades);
             }
             
+            Paragraph tituloGrupoFamiliar = new Paragraph("Grupo Familiar",fontTitulo);
+            tituloGrupoFamiliar.setSpacingAfter(9);
+            Paragraph grupoFamiliar = new Paragraph("Padre: "+estudiante.getNombrePadre()+" Telefono: "+estudiante.getTelefonoPadre()+"  Documento: "+estudiante.getDocumentoPadre(),fontBold);
+            grupoFamiliar.add("\nMadre: "+estudiante.getNombreMadre()+"  Telefono: "+estudiante.getTelefonoMadre()+"  Documento: "+estudiante.getDocumentoMadre());
+            doc2.add(tituloGrupoFamiliar);
+            doc2.add(grupoFamiliar);
+            
             // 5. Pie de página
             Paragraph pie = new Paragraph(
                 "Informe de notas generado automáticamente por " + nombre + ".",

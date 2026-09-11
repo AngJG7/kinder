@@ -115,8 +115,8 @@ public class Matricula {
                 + "Ramas artisticas: " + listarRamas() + "\n"
                 + "Estudiante: " + estudiante.getNombreCompleto()
                         + " (doc. " + estudiante.getDocumento() + ")\n"
-                + "Acudiente responsable: " + estudiante.getNombreAcudiente()
-                        + " - " + estudiante.getParentesco() + "\n"
+                + "Padre responsable: " + estudiante.getNombrePadre() + "\n"
+                + "Madre responsable: " + estudiante.getNombreMadre() + "\n"
                 + "Registrada por: " + registradaPor.getNombreCompleto()
                         + " - " + registradaPor.getCargo() + "\n";
 
@@ -129,7 +129,7 @@ public class Matricula {
         return datos;
     }
     
-    /*Formateo de bloque de texto pq no salía bien*/
+    /*Formateo de bloque de texto actualizado para ambos padres*/
     public String generarConstancia(String nombreKinder, String nitKinder) {
         return """
                ================================================
@@ -137,9 +137,9 @@ public class Matricula {
                  %s - NIT %s
                ================================================
 
-               Senor(a) %s,
-               identificado(a) con documento %s,
-               en calidad de %s del estudiante:
+               Padre: %s (Doc. %s)
+               Madre: %s (Doc. %s)
+               en calidad de padres responsables del estudiante:
 
                   %s (doc. %s)
 
@@ -151,17 +151,26 @@ public class Matricula {
                   Valor:        $%.0f
                   Estado:       %s
 
-               Como acudiente responsable, usted es el contacto
-               autorizado para autorizaciones y retiros.
-               Telefono registrado: %s
+               Como acudientes responsables, ustedes son el 
+               contacto autorizado para autorizaciones y retiros.
+               Telefonos registrados:
+               Padre: %s
+               Madre: %s
                """.formatted(numero, nombreKinder, nitKinder,
-                             estudiante.getNombreAcudiente(),
-                             estudiante.getDocumentoAcudiente(),
-                             estudiante.getParentesco(),
+                             estudiante.getNombrePadre(),
+                             estudiante.getDocumentoPadre(),
+                             estudiante.getNombreMadre(),
+                             estudiante.getDocumentoMadre(),
                              estudiante.getNombreCompleto(),
-                             estudiante.getDocumento(), fecha,
-                             anioLectivo, listarRamas(), valor, estado,
-                             estudiante.getTelefonoAcudiente());
+                             estudiante.getDocumento(), 
+                             fecha, 
+                             anioLectivo, 
+                             listarRamas(), 
+                             valor, 
+                             estado,
+                             estudiante.getTelefonoPadre(),
+                             estudiante.getTelefonoMadre());
+
     }
     /**
     public String generarMatriculaPdf(String nombreKinder, String nitKinder){
@@ -236,20 +245,30 @@ public class Matricula {
         doc.add(pTitulo);
 
         // 3. Información del Acudiente
-        Paragraph pSecAcudiente = new Paragraph("DATOS DEL ACUDIENTE RESPONSABLE", fontSeccion);
+        Paragraph pSecAcudiente = new Paragraph("DATOS DE LOS ACUDIENTES RESPONSABLES", fontSeccion);
         pSecAcudiente.setSpacingAfter(6);
         doc.add(pSecAcudiente);
 
         Paragraph pAcudiente = new Paragraph();
+        //PADRE
         pAcudiente.setLeading(16f); // Espaciado entre líneas
         pAcudiente.add(new Chunk("Nombre: ", fontBold));
-        pAcudiente.add(new Chunk(estudiante.getNombreAcudiente() + "\n", fontNormal));
+        pAcudiente.add(new Chunk(estudiante.getNombrePadre() + "\n", fontNormal));
         pAcudiente.add(new Chunk("Documento: ", fontBold));
-        pAcudiente.add(new Chunk(estudiante.getDocumentoAcudiente() + "\n", fontNormal));
-        pAcudiente.add(new Chunk("Calidad/Parentesco: ", fontBold));
-        pAcudiente.add(new Chunk(estudiante.getParentesco() + "\n", fontNormal));
+        pAcudiente.add(new Chunk(estudiante.getDocumentoPadre() + "\n", fontNormal));
+        pAcudiente.add(new Chunk("Calidad/Parentesco: Padre", fontBold));
         pAcudiente.add(new Chunk("Teléfono registrado: ", fontBold));
-        pAcudiente.add(new Chunk(estudiante.getTelefonoAcudiente() + "\n", fontNormal));
+        pAcudiente.add(new Chunk(estudiante.getTelefonoPadre() + "\n", fontNormal));
+        pAcudiente.setSpacingAfter(15);
+        //MADRE
+        pAcudiente.setLeading(16f); // Espaciado entre líneas
+        pAcudiente.add(new Chunk("Nombre: ", fontBold));
+        pAcudiente.add(new Chunk(estudiante.getNombreMadre() + "\n", fontNormal));
+        pAcudiente.add(new Chunk("Documento: ", fontBold));
+        pAcudiente.add(new Chunk(estudiante.getDocumentoMadre() + "\n", fontNormal));
+        pAcudiente.add(new Chunk("Calidad/Parentesco: Madre", fontBold));
+        pAcudiente.add(new Chunk("Teléfono registrado: ", fontBold));
+        pAcudiente.add(new Chunk(estudiante.getTelefonoMadre() + "\n", fontNormal));
         pAcudiente.setSpacingAfter(15);
         doc.add(pAcudiente);
 
