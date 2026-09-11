@@ -25,6 +25,7 @@ public class Principal {
         kinder = new KinderAtelier("Kinder Atelier", "900123456-7", "05/11/2025");
         salir = false;
         Lector.mostrar("Bienvenida al sistema de " + kinder.getNombre());
+        kinder.setCantidadAspirantes(Lector.cargarCsv(kinder.getAspirantes(),kinder.getCantidadAspirantes()));
         while (!salir) {
             opcion = Lector.leerEntero(menu());
             if (opcion == 1) {
@@ -59,6 +60,10 @@ public class Principal {
                 modificarNotaEstudiante(kinder);
             } else if (opcion == 16){
                 consultarNotasEstudiante(kinder);
+            } else if (opcion == 17){
+                registrarAspirante(kinder);
+            } else if (opcion == 18){
+                consultarInformeAspirantes(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -87,6 +92,8 @@ public class Principal {
                14. Consultar Informe de Notas
                15. Modificar Nota
                16. Consultar Notas
+               17. Registrar Aspirante
+               18. Consultar Informe Finaciero de los Aspirantes
                 0. Salir
  
                Digite una opcion:""";
@@ -426,6 +433,29 @@ public class Principal {
         */
         try {
             String archivo = "mejores10.pdf";
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec("cmd /c start " + archivo);
+            } else if (os.contains("nix") || os.contains("nux")) {
+                Runtime.getRuntime().exec("xdg-open " + archivo);
+            } else if (os.contains("mac")) {
+                Runtime.getRuntime().exec("open " + archivo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void registrarAspirante(KinderAtelier kinder){
+        kinder.registrarAspirante();
+    }
+    
+    public static void consultarInformeAspirantes(KinderAtelier kinder){
+        kinder.crearTabla();
+        Lector.guardarCsv(kinder.getAspirantes(),kinder.getCantidadAspirantes());
+        try {
+            String archivo = "reporte_aspirantes.pdf";
             String os = System.getProperty("os.name").toLowerCase();
 
             if (os.contains("win")) {

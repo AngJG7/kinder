@@ -9,6 +9,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.io.FileNotFoundException;
 /**
  *
  * @author Ángela
@@ -32,12 +33,15 @@ public class KinderAtelier {
         {"Cuenteria", "Creacion de rimas", "Teatro leido"}
     };
     private static final int MAX_REGISTROS = 100;
+    private static final int MAX_REGISTROSASPIRANTES = 100;
     private String nombre;
     private String nit;
     private String fechaActual;
     private Estudiante[] estudiantes;
     private Empleado[] empleados;
     private Matricula[] matriculas;
+    private Aspirante[] aspirantes;
+    private int cantidadAspirantes;
     private int cantidadEstudiantes;
     private int cantidadEmpleados;
     private int cantidadMatriculas;
@@ -53,10 +57,12 @@ public class KinderAtelier {
         empleados = new Empleado[MAX_REGISTROS];
         matriculas = new Matricula[MAX_REGISTROS];
         mejores10 = new Estudiante[10];
+        aspirantes = new Aspirante[MAX_REGISTROSASPIRANTES];
         
         cantidadEstudiantes = 0;
         cantidadEmpleados = 0;
         cantidadMatriculas = 0;
+        cantidadAspirantes = 0;
         consecutivo = 1;
         ultimoMensaje = "";
         
@@ -68,6 +74,15 @@ public class KinderAtelier {
     // El kinder no imprime: guarda el mensaje y quien lo llama lo muestra
     public String getUltimoMensaje() {
         return ultimoMensaje;
+    }
+    public Aspirante[] getAspirantes(){
+        return aspirantes;
+    }
+    public int getCantidadAspirantes(){
+        return cantidadAspirantes;
+    }
+    public void setCantidadAspirantes(int contador){
+        cantidadAspirantes = contador;
     }
     public boolean agregarEstudiante(Estudiante nuevo) {
         if (cantidadEstudiantes >= MAX_REGISTROS) {
@@ -410,7 +425,57 @@ public class KinderAtelier {
             }
         }
     }
+    public void registrarAspirante(){
+        Aspirante aspirante = new Aspirante(Lector.leerTexto("Ingrese el nombre del responsable financiero"),Lector.leerTexto("Ingrese la Identificación"),Lector.leerDouble("Ingrese el Salario"));
+        aspirantes[cantidadAspirantes] = aspirante;
+        cantidadAspirantes += 1;
+    }
+    public void crearTabla(){
+        try {
+            Document doc = new Document(PageSize.A4, 36, 36, 36, 36);
+            PdfWriter.getInstance(doc, new FileOutputStream("reporte_aspirantes.pdf"));
+            doc.open();
+            
+            BaseColor azulOscuro = new BaseColor(30, 81, 123);
+            BaseColor grisTexto = new BaseColor(60, 60, 60);
+            
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
+            
+            // Título del reporte
+            Paragraph titulo = new Paragraph("INFORME DE EVALUACIÓN FINANCIERA - ASPIRANTES",fontHeader);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(15);
+            doc.add(titulo);
 
+            // Tabla de 4 columnas basada en los atributos de Aspirante
+            PdfPTable tabla = new PdfPTable(4);
+            tabla.setWidthPercentage(100);
+
+            // 1. Agregar encabezados
+            String[] cabeceras = {"Identificación", "Responsable Financiero", "Salario", "Puntaje"};
+            for (String cabecera : cabeceras) {
+                tabla.addCell(cabecera);
+            }
+
+            // 2. Recorrer la lista de objetos Aspirante
+            for (int i = 0; i < cantidadAspirantes; i++) {
+                Aspirante asp = aspirantes[i];
+                if (asp != null) {
+                    tabla.addCell(asp.getIdentificacion());
+                    tabla.addCell(asp.getNombreResponsableFinanciero());
+                    tabla.addCell("$" + String.format("%.2f", asp.getSalario()));
+                    tabla.addCell(String.format("%.2f", asp.getPuntaje()));
+            }
+}
+
+            doc.add(tabla);
+            doc.close();
+            Lector.mostrar("Reporte PDF generado exitosamente.");
+
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Genera el reporte PDF con el listado de los mejores estudiantes,
      * siguiendo el mismo patron usado en Matricula.generarMatriculaPdf.
