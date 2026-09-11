@@ -516,7 +516,6 @@ public class KinderAtelier {
             PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
             doc.open();
 
-            BaseColor BLACK = new BaseColor(30, 81, 123);
 
             Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
@@ -622,17 +621,12 @@ public class KinderAtelier {
             Document doc = new Document(PageSize.A4, 50, 50, 50, 50);
             PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
             doc.open();
-
-            BaseColor azulOscuro = new BaseColor(30, 81, 123);
-            BaseColor grisTexto = new BaseColor(60, 60, 60);
-
             Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
             Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, BaseColor.BLACK);
             Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
             Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
-            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.BLACK);
 
             Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
             pKinder.setAlignment(Element.ALIGN_CENTER);
