@@ -1,19 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.kinderatelier.programa;
 
-/**
- *
- * @author Ángela
- */
 public class Empleado extends Persona {
     protected String idEmpleado;
     protected String cargo;
     protected Double salario;
     protected String fechaIngreso;
-    
+
     public Empleado(String dDocumento, String dNombres, String dApellidos, String dTelefono, String dEps, String dIdEmpleado, String dCargo,
             Double dSalario, String dFechaIngreso) {
         super(dDocumento, dNombres, dApellidos, dTelefono, dEps);
@@ -49,3 +41,4 @@ public class Empleado extends Persona {
         return datos;
     }
 }
+

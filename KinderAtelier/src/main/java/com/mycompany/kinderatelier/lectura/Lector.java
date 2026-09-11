@@ -1,14 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.kinderatelier.lectura;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Ángela
- */
 public class Lector {
     public static String leerTexto(String mensaje) {
         String ingreso;
@@ -34,6 +26,24 @@ public class Lector {
             }
         }return numero;
     }
+    public static float leerFloat(String mensaje) {
+        String ingreso;
+        float numero = 0;
+        boolean valido = false;
+        while (!valido) {
+            ingreso = leerTexto(mensaje);
+            if (ingreso.isEmpty()) {
+                return -1;
+            }
+            try {
+                numero = Float.parseFloat(ingreso);
+                valido = true;
+            } catch (NumberFormatException e) {
+                mostrar("Dato invalido. Escriba un numero decimal (ejemplo: 4.5).");
+            }
+        }
+        return numero;
+    }
     public static void mostrar(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "",
                 JOptionPane.PLAIN_MESSAGE);
@@ -52,3 +62,4 @@ public class Lector {
         }return true;
     }
 }
+

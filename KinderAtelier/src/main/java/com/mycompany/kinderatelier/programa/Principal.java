@@ -1,21 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.kinderatelier.programa;
 
 import com.mycompany.kinderatelier.lectura.Lector;
 
-
-/*Para mi programa, la función de matricula requería de la condición que no podía ser un profesor quien matriculase
-entonces construí bastante de las otras funciones para que la matricula me quedase completa */
-
-/**
- *
- * @author Ángela
- */
 public class Principal {
- 
     public static void main(String[] args) {
         KinderAtelier kinder;
         int opcion;
@@ -45,6 +32,16 @@ public class Principal {
                 consultarEstudiante(kinder);
             } else if (opcion == 10) {
                 consultarConstancia(kinder);
+            } else if (opcion == 11) {
+                consultar10Mejores(kinder);
+            } else if (opcion == 12) {
+                agregarNotasEstudiante(kinder);
+            } else if (opcion == 13) {
+                aplicarDescuento(kinder);
+            } else if (opcion == 14) {
+                modificarNotaEstudiante(kinder);
+            } else if (opcion == 15) {
+                consultarNotasEstudiante(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -56,7 +53,7 @@ public class Principal {
     static String menu() {
         return """
                ===== KINDER ATELIER =====
- 
+
                 1. Cargar datos de ejemplo
                 2. Registrar estudiante
                 3. Registrar empleado
@@ -67,8 +64,13 @@ public class Principal {
                 8. Ver estudiantes de un taller
                 9. Consultar un estudiante
                10. Generar constancia
+               11. Consultar los 10 Mejores
+               12. Agregar Notas por estudiante
+               13. Aplicar Descuentos de Honor
+               14. Modificar Nota
+               15. Consultar Notas
                 0. Salir
- 
+
                Digite una opcion:""";
     }
     static void registrarEstudiante(KinderAtelier kinder) {
@@ -87,18 +89,18 @@ public class Principal {
         String documentoAcudiente;
         String parentesco;
         String telefonoAcudiente;
- 
+
         documento = Lector.leerTexto("Documento del estudiante:");
         if (documento.isEmpty()) {
             Lector.mostrar("Registro cancelado.");
             return;
         }
-        // reviso de una si ya existe, para no hacer llenar todo al pedo
+
         if (kinder.buscarEstudiante(documento) != null) {
             Lector.mostrar("Ya existe un estudiante con ese documento!");
             return;
         }
- 
+
         nombres = Lector.leerTexto("Nombres:");
         apellidos = Lector.leerTexto("Apellidos:");
         telefono = Lector.leerTexto("Telefono:");
@@ -108,17 +110,17 @@ public class Principal {
         alergias = Lector.leerTexto("Alergias (deje vacio si no tiene):");
         habilidades = Lector.leerTexto("Habilidades artisticas que muestra:");
         direccion = Lector.leerTexto("Direccion:");
- 
+
         nombreAcudiente = Lector.leerTexto("Nombre del acudiente:");
         documentoAcudiente = Lector.leerTexto("Documento del acudiente:");
         parentesco = Lector.leerTexto("Parentesco (Madre, Padre, etc.):");
         telefonoAcudiente = Lector.leerTexto("Telefono del acudiente:");
- 
+
         nuevo = new Estudiante(documento, nombres, apellidos, telefono, eps,
                 fechaNacimiento, tipoSangre, alergias, habilidades, direccion,
                 nombreAcudiente, documentoAcudiente, parentesco,
                 telefonoAcudiente);
- 
+
         if (kinder.agregarEstudiante(nuevo)) {
             Lector.mostrar("Estudiante registrado:\n\n" + nuevo.mostrarDatos());
         } else {
@@ -140,7 +142,7 @@ public class Principal {
                                  Tipo de empleado:
                                  1. Administrativo
                                  2. Profesor""");
- 
+
         if (tipo != 1 && tipo != 2) {
             Lector.mostrar("Tipo invalido.");
             return;
@@ -150,7 +152,7 @@ public class Principal {
             Lector.mostrar("Registro cancelado.");
             return;
         }
-        // mismo caso que con el estudiante
+
         if (kinder.buscarEmpleado(documento) != null) {
             Lector.mostrar("Ya existe un empleado con ese documento.");
             return;
@@ -225,18 +227,18 @@ public class Principal {
         documento = Lector.leerTexto("Documento del estudiante a retirar:");
         motivo = Lector.leerTexto("Motivo del retiro:");
         fecha = Lector.leerTexto("Fecha del retiro (dd/mm/aaaa):");
- 
+
         kinder.desmatricular(documento, motivo, fecha, quien);
         Lector.mostrar(kinder.getUltimoMensaje());
     }
- 
+
      static void consultarTaller(KinderAtelier kinder) {
         String taller;
- 
+
         taller = elegirTaller(kinder, "De cual taller quiere ver la lista?");
         Lector.mostrar(kinder.listarPorRama(taller));
     }
- 
+
     static void consultarEstudiante(KinderAtelier kinder) {
         String documento;
         int opcion;
@@ -261,10 +263,10 @@ public class Principal {
     static Empleado pedirEmpleado(KinderAtelier kinder) {
         Empleado empleado;
         String documento;
- 
+
         documento = Lector.leerTexto("Documento del empleado que registra:");
         empleado = kinder.buscarEmpleado(documento);
- 
+
         if (empleado == null) {
             Lector.mostrar("No existe un empleado con ese documento.");
         }
@@ -273,10 +275,10 @@ public class Principal {
     static Estudiante pedirEstudiante(KinderAtelier kinder) {
         Estudiante estudiante;
         String documento;
- 
+
         documento = Lector.leerTexto("Documento del estudiante:");
         estudiante = kinder.buscarEstudiante(documento);
- 
+
         if (estudiante == null) {
             Lector.mostrar("No existe un estudiante con ese documento.");
         }
@@ -285,66 +287,172 @@ public class Principal {
     static String elegirTaller(KinderAtelier kinder, String mensaje) {
         String lista;
         int eleccion;
- 
+
         lista = mensaje + "\n\n";
         for (int i = 0; i < KinderAtelier.RAMAS.length; i++) {
             lista = lista + (i + 1) + ". " + KinderAtelier.RAMAS[i] + "\n";
         }
- 
+
         eleccion = Lector.leerEntero(lista);
         while (eleccion < 1 || eleccion > KinderAtelier.RAMAS.length) {
             Lector.mostrar("Opcion invalida.");
             eleccion = Lector.leerEntero(lista);
         }
- 
+
         return KinderAtelier.RAMAS[eleccion - 1];
+    }
+    public static void agregarNotasEstudiante(KinderAtelier kinder) {
+        String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
+        if (docEstudiante.isEmpty()) return;
+
+        Estudiante estudiante = kinder.buscarEstudiante(docEstudiante);
+        if (estudiante == null) {
+            Lector.mostrar("Estudiante no encontrado.");
+            return;
+        }
+
+        String docProfesor = Lector.leerTexto("Ingrese el documento del profesor:");
+        if (docProfesor.isEmpty()) return;
+
+        Profesor profesor = kinder.buscarProfesor(docProfesor);
+        if (profesor == null) {
+            Lector.mostrar("Profesor no encontrado (o el documento no pertenece a un docente).");
+            return;
+        }
+
+        float nota = Lector.leerFloat("Ingrese la nota (0.0 a 5.0):");
+        if (profesor.agregarNotaAEstudiante(estudiante, nota)) {
+            Lector.mostrar("Nota agregada con exito.");
+        } else {
+            Lector.mostrar("No se pudo agregar la nota (fuera de rango 0-5 o limite alcanzado de 5 notas).");
+        }
+    }
+    public static void consultar10Mejores(KinderAtelier kinder) {
+        Lector.mostrar(kinder.generarMejores10Texto());
+        kinder.generarMejores10Pdf();
+        try {
+            String archivo = "mejores10.pdf";
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec("cmd /c start " + archivo);
+            } else if (os.contains("nix") || os.contains("nux")) {
+                Runtime.getRuntime().exec("xdg-open " + archivo);
+            } else if (os.contains("mac")) {
+                Runtime.getRuntime().exec("open " + archivo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void aplicarDescuento(KinderAtelier kinder) {
+        kinder.aplicarDescuentoMejores10();
+    }
+    public static void modificarNotaEstudiante(KinderAtelier kinder) {
+        String docProfesor = Lector.leerTexto("Ingrese el documento del profesor:");
+        if (docProfesor.isEmpty()) return;
+
+        Profesor profesor = kinder.buscarProfesor(docProfesor);
+        if (profesor == null) {
+            Lector.mostrar("Profesor no encontrado (o el documento no pertenece a un docente).");
+            return;
+        }
+
+        String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
+        if (docEstudiante.isEmpty()) return;
+
+        Estudiante estudiante = kinder.buscarEstudiante(docEstudiante);
+        if (estudiante == null) {
+            Lector.mostrar("Estudiante no encontrado.");
+            return;
+        }
+
+        int posicion = Lector.leerEntero("Ingrese el numero de la nota a cambiar (1 a 5):");
+        float nuevaNota = Lector.leerFloat("Ingrese la nueva nota (0.0 a 5.0):");
+        if (profesor.modificarNotaEstudiante(estudiante, posicion, nuevaNota)) {
+            Lector.mostrar("Nota modificada con exito.");
+        } else {
+            Lector.mostrar("No se pudo modificar la nota (posicion o valor invalido).");
+        }
+    }
+    public static void consultarNotasEstudiante(KinderAtelier kinder) {
+        String docProfesor = Lector.leerTexto("Ingrese el documento del profesor:");
+        if (docProfesor.isEmpty()) return;
+
+        Profesor profesor = kinder.buscarProfesor(docProfesor);
+        if (profesor == null) {
+            Lector.mostrar("Profesor no encontrado (o el documento no pertenece a un docente).");
+            return;
+        }
+
+        String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
+        if (docEstudiante.isEmpty()) return;
+
+        Estudiante estudiante = kinder.buscarEstudiante(docEstudiante);
+        if (estudiante == null) {
+            Lector.mostrar("Estudiante no encontrado.");
+            return;
+        }
+
+        Lector.mostrar(profesor.verNotasEstudiante(estudiante) + "\n"
+                + profesor.obtenerPromedioEstudiante(estudiante));
     }
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;
         Profesor profesorMusica;
         Estudiante sofia;
         Estudiante mateo;
- 
+
         secretaria = new Empleado("435", "Luz Marina", "Ospina",
                 "3105558899", "Sura", "EMP-01", "Secretaria academica",
                 2200000.0, "01/02/2020");
- 
+
         profesorMusica = new Profesor("712", "Carlos", "Restrepo",
                 "3009991122", "Nueva EPS", "EMP-03", 2600000.0, "15/01/2022",
                 "Licenciado en Musica", "Musica");
- 
+
         kinder.agregarEmpleado(secretaria);
         kinder.agregarEmpleado(profesorMusica);
- 
+
         sofia = new Estudiante("109", "Sofia", "Gomez Ruiz",
                 "3201234567", "Sura", "12/03/2022", "O+", "",
                 "Canta y baila todo el dia", "Calle 45 # 30-12",
                 "Ana Ruiz Molina", "431", "Madre", "3201234567");
- 
+
         mateo = new Estudiante("108", "Mateo", "Alvarez Diaz",
                 "3117654321", "Savia Salud", "08/07/2021", "A+", "Mani",
                 "Dibuja muy bien", "Carrera 50 # 12-04",
                 "Jorge Alvarez Pena", "714", "Padre", "3117654321");
- 
+
         kinder.agregarEstudiante(sofia);
         kinder.agregarEstudiante(mateo);
-        // los matriculo de una para que ya haya algo que ver en los reportes
+
         kinder.matricular(sofia, new String[]{"Musica", "Danza"}, secretaria);
         kinder.matricular(mateo, new String[]{"Plastica", "Teatro"}, secretaria);
- 
+
+        float[] notasSofia = {5.0f, 4.8f, 5.0f, 4.7f, 4.9f};
+        for (float nota : notasSofia) {
+            profesorMusica.agregarNotaAEstudiante(sofia, nota);
+        }
+        float[] notasMateo = {4.0f, 3.8f, 4.2f};
+        for (float nota : notasMateo) {
+            profesorMusica.agregarNotaAEstudiante(mateo, nota);
+        }
+
         Lector.mostrar("""
                        Datos de ejemplo cargados:
- 
+
                        EMPLEADOS
                        - Luz Marina Ospina, doc. 435 (administrativa)
                        - Carlos Restrepo, doc. 712 (profesor de musica)
- 
+
                        ESTUDIANTES (ya matriculados)
-                       - Sofia Gomez Ruiz, doc. 109 - Musica y Danza
-                       - Mateo Alvarez Diaz, doc. 108 - Plastica y Teatro
- 
+                       - Sofia Gomez Ruiz, doc. 109 - Musica y Danza (5 notas, promedio 4.88)
+                       - Mateo Alvarez Diaz, doc. 108 - Plastica y Teatro (3 notas, promedio pendiente)
+
                        Use el documento 435 para matricular.
-                       Pruebe con 712 para ver el rechazo.""");
+                       Pruebe con 712 para ver el rechazo.
+                       Use el doc. 712 (profesor) en la opcion 12 para agregar notas.""");
     }
 }
- 
+

@@ -1,0 +1,206 @@
+package com.mycompany.kinderatelier.view;
+
+import com.mycompany.kinderatelier.programa.Empleado;
+import com.mycompany.kinderatelier.programa.KinderAtelier;
+import com.mycompany.kinderatelier.programa.Estudiante;
+import com.mycompany.kinderatelier.programa.Profesor;
+import com.mycompany.kinderatelier.lectura.Lector;
+
+public class VentanaPrincipal extends javax.swing.JFrame {
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
+
+    private KinderAtelier kinder;
+
+    public VentanaPrincipal() {
+        initComponents();
+        kinder = new KinderAtelier("Kinder Atelier", "900123456-7", "05/11/2025");
+    }
+
+    private void cargarDatosDeEjemplo() {
+        Empleado secretaria;
+        Profesor profesorMusica;
+        Estudiante sofia;
+        Estudiante mateo;
+
+        secretaria = new Empleado("43567890", "Luz Marina", "Ospina",
+                "3105558899", "Sura", "EMP-01", "Secretaria academica",
+                2200000.0, "01/02/2020");
+
+        profesorMusica = new Profesor("71234567", "Carlos", "Restrepo",
+                "3009991122", "Nueva EPS", "EMP-03", 2600000.0, "15/01/2022",
+                "Licenciado en Musica", "Musica");
+
+        kinder.agregarEmpleado(secretaria);
+        kinder.agregarEmpleado(profesorMusica);
+
+        sofia = new Estudiante("1098765432", "Sofia", "Gomez Ruiz",
+                "3201234567", "Sura", "12/03/2022", "O+", "",
+                "Canta y baila todo el dia", "Calle 45 # 30-12",
+                "Ana Ruiz Molina", "43112233", "Madre", "3201234567");
+
+        mateo = new Estudiante("1087654321", "Mateo", "Alvarez Diaz",
+                "3117654321", "Savia Salud", "08/07/2021", "A+", "Mani",
+                "Dibuja muy bien", "Carrera 50 # 12-04",
+                "Jorge Alvarez Pena", "71445566", "Padre", "3117654321");
+
+        kinder.agregarEstudiante(sofia);
+        kinder.agregarEstudiante(mateo);
+
+        kinder.matricular(sofia, new String[]{"Musica", "Danza"}, secretaria);
+        kinder.matricular(mateo, new String[]{"Plastica", "Teatro"}, secretaria);
+        kinder.asignarTalento("1098765432", "Artistico");
+        kinder.asignarTalento("1087654321", "Academico");
+
+        Lector.mostrar("Datos de ejemplo cargados.\n\n"
+                + "Secretaria: 43567890 (matricula)\n"
+                + "Profesor: 71234567 (no puede matricular)\n"
+                + "Sofia: 1098765432\n"
+                + "Mateo: 1087654321\n");
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.5f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.0f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.8f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 4.2f);
+        profesorMusica.agregarNotaAEstudiante(sofia, 5.0f);
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        Estudiantes = new javax.swing.JButton();
+        Personal = new javax.swing.JButton();
+        Matriculas = new javax.swing.JButton();
+        Reportes = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        cargarDatosEjemplo = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 0, 48));
+        jLabel1.setText("KInder atelier");
+
+        Estudiantes.setText("Estudiantes");
+        Estudiantes.addActionListener(this::EstudiantesActionPerformed);
+
+        Personal.setText("Personal");
+        Personal.addActionListener(this::PersonalActionPerformed);
+
+        Matriculas.setText("Matriculas");
+        Matriculas.addActionListener(this::MatriculasActionPerformed);
+
+        Reportes.setText("Reportes");
+        Reportes.setToolTipText("");
+        Reportes.addActionListener(this::ReportesActionPerformed);
+
+        jLabel2.setText("¡Bienvenid@ a la interfaz del kinder Atelier!");
+
+        cargarDatosEjemplo.setText("cargar datos de ejemplo");
+        cargarDatosEjemplo.addActionListener(this::cargarDatosEjemploActionPerformed);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(138, 138, 138)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(215, 215, 215)
+                        .addComponent(jLabel2)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Reportes, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Estudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addComponent(Personal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addComponent(Matriculas, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(235, 235, 235)
+                .addComponent(cargarDatosEjemplo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Personal, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Matriculas, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Estudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(Reportes, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cargarDatosEjemplo)
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void EstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstudiantesActionPerformed
+        VentanaEstudiantes ventana = new VentanaEstudiantes(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_EstudiantesActionPerformed
+
+    private void PersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PersonalActionPerformed
+        VentanaPersonal ventana = new VentanaPersonal(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_PersonalActionPerformed
+
+    private void cargarDatosEjemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarDatosEjemploActionPerformed
+        cargarDatosDeEjemplo();
+    }//GEN-LAST:event_cargarDatosEjemploActionPerformed
+
+    private void MatriculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MatriculasActionPerformed
+        VentanaMatriculas ventana = new VentanaMatriculas(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_MatriculasActionPerformed
+
+    private void ReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReportesActionPerformed
+        VentanaReportes ventana = new VentanaReportes(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_ReportesActionPerformed
+
+    public static void main(String args[]) {
+
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(() -> new VentanaPrincipal().setVisible(true));
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Estudiantes;
+    private javax.swing.JButton Matriculas;
+    private javax.swing.JButton Personal;
+    private javax.swing.JButton Reportes;
+    private javax.swing.JButton cargarDatosEjemplo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    // End of variables declaration//GEN-END:variables
+}
+

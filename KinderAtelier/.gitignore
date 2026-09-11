@@ -31,3 +31,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# PDFs generados por la app (constancia, boletin, top 10)
+matricula.pdf
+matricula_*.pdf
+boletin_*.pdf
+mejores10.pdf
