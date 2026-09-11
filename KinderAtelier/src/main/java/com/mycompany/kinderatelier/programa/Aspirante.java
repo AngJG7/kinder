@@ -19,7 +19,7 @@ public class Aspirante {
         salario = dSalario;
         puntaje = calcularPuntaje();
     }
-    public String getNombreAcudiente() {
+    public String getNombreResponsableFinanciero() {
         return nombreResponsableFinanciero;
     }
     public String getIdentificacion() {
@@ -41,6 +41,6 @@ public class Aspirante {
                + "Acudiente: " + nombreResponsableFinanciero + "\n"
                + "Identificacion: " + identificacion + "\n"
                + "Salario: $" + salario + "\n"
-               + "Puntaje: " + String.format("%", puntaje) + "\n";
+               + "Puntaje: " + String.format("%.2f", puntaje) + "\n";
     }
 }
