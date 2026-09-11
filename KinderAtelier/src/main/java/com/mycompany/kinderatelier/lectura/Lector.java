@@ -34,6 +34,24 @@ public class Lector {
             }
         }return numero;
     }
+    public static float leerFloat(String mensaje) {
+        String ingreso;
+        float numero = 0;
+        boolean valido = false;
+        while (!valido) {
+            ingreso = leerTexto(mensaje);
+            if (ingreso.isEmpty()) {
+                return -1; // Permite cancelar la operacion
+            }
+            try {
+                numero = Float.parseFloat(ingreso);
+                valido = true;
+            } catch (NumberFormatException e) {
+                mostrar("Dato invalido. Escriba un numero decimal (ejemplo: 4.5).");
+            }
+        }
+        return numero;
+    }
     public static void mostrar(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "",
                 JOptionPane.PLAIN_MESSAGE);

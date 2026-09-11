@@ -5,9 +5,7 @@
 package com.mycompany.kinderatelier.programa;
 
 import com.mycompany.kinderatelier.lectura.Lector;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
-import java.io.FileOutputStream;
+
 
 /*Para mi programa, la función de matricula requería de la condición que no podía ser un profesor quien matriculase
 entonces construí bastante de las otras funciones para que la matricula me quedase completa */
@@ -17,7 +15,6 @@ entonces construí bastante de las otras funciones para que la matricula me qued
  * @author Ángela
  */
 public class Principal {
- 
     public static void main(String[] args) {
         KinderAtelier kinder;
         int opcion;
@@ -48,7 +45,11 @@ public class Principal {
             } else if (opcion == 10) {
                 consultarConstancia(kinder);
             } else if (opcion == 11) {
-                consultarMatriculaPdf(kinder);
+                consultar10Mejores(kinder);
+            } else if (opcion == 12) {
+                agregarNotasEstudiante(kinder);
+            } else if (opcion == 13) {
+                aplicarDescuento(kinder);
             } else if (opcion == 0) {
                 salir = true;
                 Lector.mostrar("Hasta pronto!");
@@ -71,9 +72,11 @@ public class Principal {
                 8. Ver estudiantes de un taller
                 9. Consultar un estudiante
                10. Generar constancia
-               11. Consultar Matricula PDF
+               11. Consultar los 10 Mejores
+               12. Agregar Notas por estudiante
+               13. Aplicar Descuentos de Honor
                 0. Salir
- 
+
                Digite una opcion:""";
     }
     static void registrarEstudiante(KinderAtelier kinder) {
@@ -304,16 +307,52 @@ public class Principal {
  
         return KinderAtelier.RAMAS[eleccion - 1];
     }
-    public static void consultarMatriculaPdf(KinderAtelier kinder){
-        int numero;
-        numero = Lector.leerEntero("Numero de la matricula:");
-        Lector.mostrar(kinder.generarMatriculaPdf(numero));
+    public static void agregarNotasEstudiante(KinderAtelier kinder) {
+        String docEstudiante = Lector.leerTexto("Ingrese el documento del estudiante:");
+        if (docEstudiante.isEmpty()) return;
+
+        Estudiante estudiante = kinder.buscarEstudiante(docEstudiante);
+        if (estudiante == null) {
+            Lector.mostrar("Estudiante no encontrado.");
+            return;
+        }
+
+        String docProfesor = Lector.leerTexto("Ingrese el documento del profesor:");
+        if (docProfesor.isEmpty()) return;
+
+        Profesor profesor = kinder.buscarProfesor(docProfesor);
+        if (profesor == null) {
+            Lector.mostrar("Profesor no encontrado (o el documento no pertenece a un docente).");
+            return;
+        }
+
+        float nota = Lector.leerFloat("Ingrese la nota (0.0 a 5.0):");
+        if (profesor.agregarNotaAEstudiante(estudiante, nota)) {
+            Lector.mostrar("Nota agregada con exito.");
+        } else {
+            Lector.mostrar("No se pudo agregar la nota (fuera de rango 0-5 o limite alcanzado de 5 notas).");
+        }
+    }
+    public static void consultar10Mejores(KinderAtelier kinder) {
+        Lector.mostrar(kinder.generarMejores10Texto());
+        kinder.generarMejores10Pdf();
         try {
-            Runtime.getRuntime().exec("cmd /c start matricula.pdf");
-        } catch (Exception e){
+            String archivo = "mejores10.pdf";
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec("cmd /c start " + archivo);
+            } else if (os.contains("nix") || os.contains("nux")) {
+                Runtime.getRuntime().exec("xdg-open " + archivo);
+            } else if (os.contains("mac")) {
+                Runtime.getRuntime().exec("open " + archivo);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+    }
+    public static void aplicarDescuento(KinderAtelier kinder) {
+        kinder.aplicarDescuentoMejores10();
     }
     static void cargarDatosDeEjemplo(KinderAtelier kinder) {
         Empleado secretaria;
@@ -347,7 +386,19 @@ public class Principal {
         // los matriculo de una para que ya haya algo que ver en los reportes
         kinder.matricular(sofia, new String[]{"Musica", "Danza"}, secretaria);
         kinder.matricular(mateo, new String[]{"Plastica", "Teatro"}, secretaria);
- 
+
+        // Notas de ejemplo para probar promedios, ranking y descuentos de honor.
+        // Sofia queda con las 5 notas (promedio calculable); Mateo con solo 3
+        // para ver la validacion de "promedio pendiente".
+        float[] notasSofia = {5.0f, 4.8f, 5.0f, 4.7f, 4.9f}; // promedio 4.88
+        for (float nota : notasSofia) {
+            profesorMusica.agregarNotaAEstudiante(sofia, nota);
+        }
+        float[] notasMateo = {4.0f, 3.8f, 4.2f};
+        for (float nota : notasMateo) {
+            profesorMusica.agregarNotaAEstudiante(mateo, nota);
+        }
+
         Lector.mostrar("""
                        Datos de ejemplo cargados:
  
@@ -356,11 +407,12 @@ public class Principal {
                        - Carlos Restrepo, doc. 712 (profesor de musica)
  
                        ESTUDIANTES (ya matriculados)
-                       - Sofia Gomez Ruiz, doc. 109 - Musica y Danza
-                       - Mateo Alvarez Diaz, doc. 108 - Plastica y Teatro
- 
+                       - Sofia Gomez Ruiz, doc. 109 - Musica y Danza (5 notas, promedio 4.88)
+                       - Mateo Alvarez Diaz, doc. 108 - Plastica y Teatro (3 notas, promedio pendiente)
+
                        Use el documento 435 para matricular.
-                       Pruebe con 712 para ver el rechazo.""");
+                       Pruebe con 712 para ver el rechazo.
+                       Use el doc. 712 (profesor) en la opcion 12 para agregar notas.""");
     }
 }
  

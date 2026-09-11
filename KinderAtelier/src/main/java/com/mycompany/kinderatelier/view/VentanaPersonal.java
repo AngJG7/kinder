@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.kinderatelier.view;
+import com.mycompany.kinderatelier.programa.KinderAtelier;
+import com.mycompany.kinderatelier.programa.Empleado;
+import com.mycompany.kinderatelier.programa.Profesor;
+import com.mycompany.kinderatelier.lectura.Lector;
 
 /**
  *
@@ -15,10 +19,90 @@ public class VentanaPersonal extends javax.swing.JFrame {
     /**
      * Creates new form StaffWindow
      */
-    public VentanaPersonal() {
+    private KinderAtelier kinder;
+
+    public VentanaPersonal(KinderAtelier dKinder) {
         initComponents();
+        kinder = dKinder;
+    }
+        private Empleado empleadoBuscado() {
+        String documento;
+        Empleado empleado;
+
+        documento = documentoTrabajador.getText().trim();
+        if (documento.isEmpty()) {
+            Lector.mostrar("Escriba primero el documento del trabajador.");
+            return null;
+        }
+        empleado = kinder.buscarEmpleado(documento);
+        if (empleado == null) {
+            Lector.mostrar("No existe un trabajador con documento " + documento);
+        }
+        return empleado;
     }
 
+    private void nuevoEmpleado(boolean esProfesor) {
+        Empleado nuevo;
+        String documento;
+        String nombres;
+        String apellidos;
+        String telefono;
+        String eps;
+        String idEmpleado;
+        String fechaIngreso;
+        double salario;
+
+        documento = Lector.leerTexto("Documento:");
+        if (documento.isEmpty()) {
+            Lector.mostrar("Registro cancelado.");
+            return;
+        }
+        if (kinder.buscarEmpleado(documento) != null) {
+            Lector.mostrar("Ya existe un trabajador con ese documento!");
+            return;
+        }
+        nombres = Lector.leerTexto("Nombres:");
+        apellidos = Lector.leerTexto("Apellidos:");
+        telefono = Lector.leerTexto("Telefono:");
+        eps = Lector.leerTexto("EPS:");
+        idEmpleado = Lector.leerTexto("ID de empleado:");
+        salario = Lector.leerEntero("Salario:");
+        fechaIngreso = Lector.leerTexto("Fecha de ingreso (dd/mm/aaaa):");
+
+        if (esProfesor) {
+            nuevo = new Profesor(documento, nombres, apellidos, telefono, eps,
+                    idEmpleado, salario, fechaIngreso,
+                    Lector.leerTexto("Titulo:"),
+                    elegirTaller("Taller que dicta:"));
+        } else {
+            nuevo = new Empleado(documento, nombres, apellidos, telefono, eps,
+                    idEmpleado, Lector.leerTexto("Cargo:"), salario,
+                    fechaIngreso);
+        }
+
+        if (kinder.agregarEmpleado(nuevo)) {
+            Lector.mostrar("Trabajador registrado:\n\n" + nuevo.mostrarDatos());
+            documentoTrabajador.setText(documento);
+        } else {
+            Lector.mostrar(kinder.getUltimoMensaje());
+        }
+    }
+
+    private String elegirTaller(String mensaje) {
+        String lista;
+        int eleccion;
+
+        lista = mensaje + "\n\n";
+        for (int i = 0; i < KinderAtelier.RAMAS.length; i++) {
+            lista = lista + (i + 1) + ". " + KinderAtelier.RAMAS[i] + "\n";
+        }
+        eleccion = Lector.leerEntero(lista);
+        while (eleccion < 1 || eleccion > KinderAtelier.RAMAS.length) {
+            Lector.mostrar("Opcion invalida.");
+            eleccion = Lector.leerEntero(lista);
+        }
+        return KinderAtelier.RAMAS[eleccion - 1];
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,47 +112,120 @@ public class VentanaPersonal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        documentoTrabajador = new javax.swing.JTextField();
+        listaTrabajadores = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        verFicha = new javax.swing.JButton();
+        nuevoProfesor = new javax.swing.JButton();
+        nuevoAdministrador = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 0, 36)); // NOI18N
+        jLabel1.setText("PERSONAL");
+
+        jLabel2.setText("Ingrese el documento del trabajador a buscar:");
+
+        documentoTrabajador.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        listaTrabajadores.setText("Ver lista de todos los trabajadores");
+        listaTrabajadores.addActionListener(this::listaTrabajadoresActionPerformed);
+
+        verFicha.setText("Ver Ficha");
+        verFicha.setActionCommand("jButton3");
+        verFicha.addActionListener(this::verFichaActionPerformed);
+
+        nuevoProfesor.setText("Nuevo profesor");
+        nuevoProfesor.addActionListener(this::nuevoProfesorActionPerformed);
+
+        nuevoAdministrador.setText("Nuevo administrador");
+        nuevoAdministrador.addActionListener(this::nuevoAdministradorActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jSeparator1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(listaTrabajadores)
+                .addGap(162, 162, 162))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(112, 112, 112)
+                        .addComponent(nuevoProfesor)
+                        .addGap(51, 51, 51)
+                        .addComponent(nuevoAdministrador))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(documentoTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(97, 97, 97)
+                        .addComponent(verFicha, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nuevoProfesor)
+                    .addComponent(nuevoAdministrador))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(documentoTrabajador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listaTrabajadores)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(verFicha, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+    private void verFichaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verFichaActionPerformed
+        Empleado empleado = empleadoBuscado();
+        if (empleado != null) {
+            Lector.mostrar(empleado.mostrarDatos());
         }
-        //</editor-fold>
+    }//GEN-LAST:event_verFichaActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaPersonal().setVisible(true));
-    }
+    private void nuevoProfesorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoProfesorActionPerformed
+        nuevoEmpleado(true);
+    }//GEN-LAST:event_nuevoProfesorActionPerformed
+
+    private void nuevoAdministradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoAdministradorActionPerformed
+        nuevoEmpleado(false);
+    }//GEN-LAST:event_nuevoAdministradorActionPerformed
+
+    private void listaTrabajadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaTrabajadoresActionPerformed
+        Lector.mostrar(kinder.listarPersonal());
+    }//GEN-LAST:event_listaTrabajadoresActionPerformed
+
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField documentoTrabajador;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton listaTrabajadores;
+    private javax.swing.JButton nuevoAdministrador;
+    private javax.swing.JButton nuevoProfesor;
+    private javax.swing.JButton verFicha;
     // End of variables declaration//GEN-END:variables
 }

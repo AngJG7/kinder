@@ -61,6 +61,9 @@ public class Matricula {
     public boolean estaActiva() {
         return estado.equals("activa");
     }
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
     public boolean inscribirRama(String rama) {
         if (cantidadRamas >= MAX_RAMAS) {
             return false;

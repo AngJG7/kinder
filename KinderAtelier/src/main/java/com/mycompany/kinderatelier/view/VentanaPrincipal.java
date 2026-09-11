@@ -5,9 +5,10 @@
 package com.mycompany.kinderatelier.view;
 
 import com.mycompany.kinderatelier.programa.Empleado;
-import com.mycompany.kinderatelier.programa.Estudiante;
 import com.mycompany.kinderatelier.programa.KinderAtelier;
+import com.mycompany.kinderatelier.programa.Estudiante;
 import com.mycompany.kinderatelier.programa.Profesor;
+import com.mycompany.kinderatelier.lectura.Lector;
 
 /**
  *
@@ -25,8 +26,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
         kinder = new KinderAtelier("Kinder Atelier", "900123456-7", "05/11/2025");
-        cargarDatosDeEjemplo();
     }
+    
     private void cargarDatosDeEjemplo() {
         Empleado secretaria;
         Profesor profesorMusica;
@@ -59,6 +60,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         kinder.matricular(sofia, new String[]{"Musica", "Danza"}, secretaria);
         kinder.matricular(mateo, new String[]{"Plastica", "Teatro"}, secretaria);
+        kinder.asignarTalento("1098765432", "Artistico");
+        kinder.asignarTalento("1087654321", "Academico");
+
+        Lector.mostrar("Datos de ejemplo cargados.\n\n"
+                + "Secretaria: 43567890 (matricula)\n"
+                + "Profesor: 71234567 (no puede matricular)\n"
+                + "Sofia: 1098765432\n"
+                + "Mateo: 1087654321\n");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,59 +79,63 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        Estudiantes = new javax.swing.JButton();
+        Personal = new javax.swing.JButton();
+        Matriculas = new javax.swing.JButton();
+        Reportes = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        cargarDatosEjemplo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 0, 48)); // NOI18N
         jLabel1.setText("KInder atelier");
 
-        jButton1.setText("Estudiantes");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        Estudiantes.setText("Estudiantes");
+        Estudiantes.addActionListener(this::EstudiantesActionPerformed);
 
-        jButton2.setText("Personal");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        Personal.setText("Personal");
+        Personal.addActionListener(this::PersonalActionPerformed);
 
-        jButton3.setText("Matriculas");
+        Matriculas.setText("Matriculas");
+        Matriculas.addActionListener(this::MatriculasActionPerformed);
 
-        jButton6.setText("Reportes");
-        jButton6.setToolTipText("");
-
-        jButton7.setText("Notas");
+        Reportes.setText("Reportes");
+        Reportes.setToolTipText("");
+        Reportes.addActionListener(this::ReportesActionPerformed);
 
         jLabel2.setText("¡Bienvenid@ a la interfaz del kinder Atelier!");
+
+        cargarDatosEjemplo.setText("cargar datos de ejemplo");
+        cargarDatosEjemplo.addActionListener(this::cargarDatosEjemploActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(138, 138, 138)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(215, 215, 215)
-                        .addComponent(jLabel2)))
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(235, 235, 235)
+                        .addComponent(cargarDatosEjemplo)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Reportes, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Estudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addComponent(Personal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addComponent(Matriculas, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,27 +146,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(59, Short.MAX_VALUE))
+                    .addComponent(Personal, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Matriculas, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Estudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(Reportes, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cargarDatosEjemplo)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void EstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstudiantesActionPerformed
         VentanaEstudiantes ventana = new VentanaEstudiantes(kinder);
         ventana.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_EstudiantesActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void PersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PersonalActionPerformed
+        VentanaPersonal ventana = new VentanaPersonal(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_PersonalActionPerformed
+
+    private void cargarDatosEjemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarDatosEjemploActionPerformed
+        cargarDatosDeEjemplo();
+    }//GEN-LAST:event_cargarDatosEjemploActionPerformed
+
+    private void MatriculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MatriculasActionPerformed
+        VentanaMatriculas ventana = new VentanaMatriculas(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_MatriculasActionPerformed
+
+    private void ReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReportesActionPerformed
+        VentanaReportes ventana = new VentanaReportes(kinder);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_ReportesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,13 +207,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new VentanaPrincipal().setVisible(true));
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton Estudiantes;
+    private javax.swing.JButton Matriculas;
+    private javax.swing.JButton Personal;
+    private javax.swing.JButton Reportes;
+    private javax.swing.JButton cargarDatosEjemplo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables

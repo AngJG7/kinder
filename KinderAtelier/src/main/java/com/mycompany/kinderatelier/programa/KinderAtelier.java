@@ -3,11 +3,17 @@
  */
 
 package com.mycompany.kinderatelier.programa;
+import com.mycompany.kinderatelier.lectura.Lector;
+import java.util.Arrays;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.FileOutputStream;
 /**
  *
  * @author Ángela
  */
 public class KinderAtelier {
+    public static final int VALOR_DESCUENTO_MATRICULA = 250000;
     public static final int ANIO_LECTIVO = 2026;
     public static final int EDAD_MINIMA = 4;
     public static final int EDAD_MAXIMA = 5;
@@ -15,6 +21,8 @@ public class KinderAtelier {
     public static final double VALOR_MATRICULA = 450000;
     public static final String[] RAMAS = {"Plastica", "Musica", "Teatro",
                                           "Danza", "Literatura"};
+    public static final String[] TALENTOS = {"Deportivo", "Artistico",
+                                             "Academico", "Social"};
     private static final String[][] ACTIVIDADES = {
         {"Pintura con dedos", "Modelado en arcilla", "Collage",
          "Dibujo libre"},
@@ -103,6 +111,16 @@ public class KinderAtelier {
         for (int i = 0; i < cantidadEmpleados; i++) {
             if (empleados[i].getDocumento().equals(documento)) {
                 encontrado = empleados[i];
+            }
+        }return encontrado;
+    }
+    public Profesor buscarProfesor(String documento) {
+        Profesor encontrado;
+
+        encontrado = null;
+        for (int i = 0; i < cantidadEmpleados; i++) {
+            if (empleados[i] instanceof Profesor && empleados[i].getDocumento().equals(documento)) {
+                encontrado = (Profesor) empleados[i];
             }
         }return encontrado;
     }
@@ -327,5 +345,347 @@ public class KinderAtelier {
         } else {
             return matricula.generarMatriculaPdf(nombre,nit);
         }
+    }
+
+    /**
+     * Verifica que el talento este dentro de las categorias que maneja
+     * el kinder. Mismo criterio que esRamaValida con los talleres.
+     */
+    public boolean esTalentoValido(String talento) {
+        for (int i = 0; i < TALENTOS.length; i++) {
+            if (TALENTOS[i].equals(talento)) {
+                return true;
+            }
+        }return false;
+    }
+
+    /**
+     * Le asigna una categoria de talento a un estudiante ya registrado.
+     * Se hace aparte del registro porque el talento se identifica con el
+     * tiempo, observando al nino, no el primer dia.
+     */
+    public boolean asignarTalento(String documento, String talento) {
+        Estudiante estudiante;
+        estudiante = buscarEstudiante(documento);
+        if (estudiante == null) {
+            ultimoMensaje = "No existe un estudiante con documento " + documento;
+            return false;
+        }
+        if (!esTalentoValido(talento)) {
+            ultimoMensaje = "El talento " + talento + " no es una categoria valida";
+            return false;
+        }
+        estudiante.setTalento(talento);
+        ultimoMensaje = "Talento " + talento + " asignado a "
+                + estudiante.getNombreCompleto();
+        return true;
+    }
+
+    /**
+     * Cuenta cuantos estudiantes tienen identificado un talento.
+     */
+    public int contarPorTalento(String talento) {
+        int contador;
+        contador = 0;
+        for (int i = 0; i < cantidadEstudiantes; i++) {
+            if (estudiantes[i].getTalento().equals(talento)) {
+                contador = contador + 1;
+            }
+        }return contador;
+    }
+
+    /**
+     * Lista los estudiantes de una categoria de talento, con el detalle
+     * que el acudiente reporto en habilidades.
+     */
+    public String listarPorTalento(String talento) {
+        String reporte;
+        if (!esTalentoValido(talento)) {
+            return "El talento " + talento + " no es una categoria valida\n";
+        }
+        reporte = "TALENTO " + talento.toUpperCase() + " ("
+                + contarPorTalento(talento) + " estudiantes)\n\n";
+        for (int i = 0; i < cantidadEstudiantes; i++) {
+            if (estudiantes[i].getTalento().equals(talento)) {
+                reporte = reporte + "- " + estudiantes[i].getNombreCompleto()
+                        + " (" + estudiantes[i].calcularEdad() + " anios)\n";
+                if (estudiantes[i].getHabilidades().isEmpty()) {
+                    reporte = reporte + "    sin detalle registrado\n";
+                } else {
+                    reporte = reporte + "    " + estudiantes[i].getHabilidades() + "\n";
+                }
+            }
+        }return reporte;
+    }
+
+    /**
+     * Distribucion de los talentos en todo el kinder. Le sirve a la
+     * direccion para ver si el desarrollo de los ninos esta balanceado
+     * o si hay areas descuidadas.
+     */
+    public String mostrarDistribucionTalentos() {
+        String reporte;
+        int conTalento;
+        int enCategoria;
+        double porcentaje;
+
+        conTalento = 0;
+        for (int i = 0; i < cantidadEstudiantes; i++) {
+            if (estudiantes[i].tieneTalento()) {
+                conTalento = conTalento + 1;
+            }
+        }
+
+        reporte = "DESARROLLO INTEGRAL - " + nombre + "\n\n";
+        reporte = reporte + "Estudiantes registrados: " + cantidadEstudiantes + "\n";
+        reporte = reporte + "Con talento identificado: " + conTalento + "\n";
+        reporte = reporte + "Sin identificar: " + (cantidadEstudiantes - conTalento)
+                + "\n\n";
+
+        if (conTalento == 0) {
+            return reporte + "Todavia no hay talentos identificados\n";
+        }
+
+        for (int i = 0; i < TALENTOS.length; i++) {
+            enCategoria = contarPorTalento(TALENTOS[i]);
+            porcentaje = (enCategoria * 100.0) / conTalento;
+            reporte = reporte + TALENTOS[i] + ": " + enCategoria
+                    + " ninos (" + Math.round(porcentaje) + "%)\n";
+        }return reporte;
+    }
+
+    /**
+     * Listado de todos los estudiantes registrados, con su talento y
+     * los talleres en los que esta matriculado. Los que aparecen como
+     * "sin matricular" estan registrados pero no inscritos todavia.
+     */
+    public String listarEstudiantes() {
+        String reporte;
+        Matricula matricula;
+
+        reporte = "ESTUDIANTES REGISTRADOS (" + cantidadEstudiantes + ")\n\n";
+        for (int i = 0; i < cantidadEstudiantes; i++) {
+            matricula = buscarMatriculaActiva(estudiantes[i].getDocumento());
+            reporte = reporte + "- " + estudiantes[i].getNombreCompleto()
+                    + " (doc. " + estudiantes[i].getDocumento() + ", "
+                    + estudiantes[i].calcularEdad() + " anios)\n";
+            if (matricula == null) {
+                reporte = reporte + "    Talleres: sin matricular\n";
+            } else {
+                reporte = reporte + "    Talleres: " + matricula.listarRamas() + "\n";
+            }
+            if (estudiantes[i].tieneTalento()) {
+                reporte = reporte + "    Talento: "
+                        + estudiantes[i].getTalento() + "\n";
+            }
+        }return reporte;
+    }
+
+    /**
+     * Listado del personal, con cargo y taller asignado en el caso de
+     * los profesores.
+     */
+    public String listarPersonal() {
+        String reporte;
+
+        reporte = "PERSONAL DEL KINDER (" + cantidadEmpleados + ")\n\n";
+        for (int i = 0; i < cantidadEmpleados; i++) {
+            reporte = reporte + "- " + empleados[i].getNombreCompleto()
+                    + " (doc. " + empleados[i].getDocumento() + ")\n";
+            reporte = reporte + "    Cargo: " + empleados[i].getCargo() + "\n";
+            if (!empleados[i].esAdministrativo()) {
+                Profesor profesor = (Profesor) empleados[i];
+                reporte = reporte + "    Dicta: " + profesor.getRamaAsignada() + "\n";
+            }
+        }return reporte;
+    }
+
+    /**
+     * Devuelve el listado de los mejores estudiantes (hasta 10) ordenados
+     * de mayor a menor promedio. Solo considera estudiantes que ya tienen
+     * las MAX_NOTAS notas registradas (promedio distinto de -1).
+     * Esta función SOLO consulta y ordena: no aplica descuentos ni bonos.
+     */
+    public Estudiante[] mejores10() {
+        // Copia solo las posiciones realmente usadas del arreglo
+        Estudiante[] candidatos = Arrays.copyOf(estudiantes, cantidadEstudiantes);
+
+        // Bubble sort descendente por promedio
+        for (int i = 0; i < candidatos.length - 1; i++) {
+            for (int j = 0; j < candidatos.length - 1 - i; j++) {
+                if (candidatos[j].calcularPromedio() < candidatos[j + 1].calcularPromedio()) {
+                    Estudiante aux = candidatos[j];
+                    candidatos[j] = candidatos[j + 1];
+                    candidatos[j + 1] = aux;
+                }
+            }
+        }
+
+        int cantidadFinal = Math.min(10, candidatos.length);
+        return Arrays.copyOfRange(candidatos, 0, cantidadFinal);
+    }
+
+    /**
+     * Aplica el beneficio (descuento en matricula) a los estudiantes
+     * que estan en el listado de mejores10(). Es una accion explicita,
+     * separada de la consulta, para no reaplicar el beneficio cada vez
+     * que alguien solo quiere VER el listado.
+     */
+    public void aplicarDescuentoMejores10() {
+        Estudiante[] mejores = mejores10();
+
+        for (int k = 0; k < cantidadMatriculas; k++) {
+            Matricula matricula = matriculas[k];
+
+            if (matricula != null && matricula.estaActiva()) {
+                boolean esTop10 = false;
+
+                // Verificamos si el estudiante de esta matricula pertenece al Top 10
+                for (Estudiante e : mejores) {
+                    if (e != null && e.getDocumento().equals(matricula.getEstudiante().getDocumento())) {
+                        esTop10 = true;
+                        break;
+                    }
+                }
+
+                if (esTop10) {
+                    matricula.setValor(VALOR_MATRICULA - VALOR_DESCUENTO_MATRICULA);
+                    Lector.mostrar("Descuento aplicado/mantenido para: " + matricula.getEstudiante().getNombreCompleto());
+                } else {
+                    // Si salio del Top 10 o no pertenece, se restablece la tarifa plena
+                    matricula.setValor(VALOR_MATRICULA);
+                }
+            }
+        }
+    }
+
+    /**
+     * Genera el reporte PDF con el listado de los mejores estudiantes,
+     * siguiendo el mismo patron usado en Matricula.generarMatriculaPdf.
+     */
+    public String generarMejores10Pdf() {
+        Estudiante[] mejores = mejores10();
+        String nombreArchivo = "mejores10.pdf";
+        try {
+            Document doc = new Document(PageSize.A4, 50, 50, 50, 50);
+            PdfWriter.getInstance(doc, new FileOutputStream(nombreArchivo));
+            doc.open();
+
+            // 1. Colores y fuentes corporativas
+            BaseColor azulOscuro = new BaseColor(30, 81, 123);
+            BaseColor grisTexto = new BaseColor(60, 60, 60);
+
+            Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, azulOscuro);
+            Font fontSubHeader = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
+            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, BaseColor.BLACK);
+            Font fontSeccion = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, azulOscuro);
+            Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, grisTexto);
+            Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 10, grisTexto);
+            Font fontPie = FontFactory.getFont(FontFactory.TIMES_ITALIC, 9, BaseColor.GRAY);
+
+            // 2. Encabezado de la Institución
+            Paragraph pKinder = new Paragraph(nombre.toUpperCase(), fontHeader);
+            pKinder.setAlignment(Element.ALIGN_CENTER);
+            doc.add(pKinder);
+
+            Paragraph pNit = new Paragraph("NIT: " + nit, fontSubHeader);
+            pNit.setAlignment(Element.ALIGN_CENTER);
+            pNit.setSpacingAfter(10);
+            doc.add(pNit);
+
+            // Línea divisoria
+            Paragraph linea = new Paragraph("________________________________________________________________________", fontSubHeader);
+            linea.setAlignment(Element.ALIGN_CENTER);
+            linea.setSpacingAfter(15);
+            doc.add(linea);
+
+            // 3. Título Principal
+            Paragraph pTitulo = new Paragraph("CUADRO DE HONOR - 10 MEJORES ESTUDIANTES", fontTitulo);
+            pTitulo.setAlignment(Element.ALIGN_CENTER);
+            pTitulo.setSpacingAfter(20);
+            doc.add(pTitulo);
+
+            // 4. Listado de Estudiantes
+            if (mejores.length == 0) {
+                Paragraph pVacio = new Paragraph("No hay estudiantes registrados o con notas disponibles.", fontNormal);
+                pVacio.setAlignment(Element.ALIGN_CENTER);
+                doc.add(pVacio);
+            } else {
+                for (int i = 0; i < mejores.length; i++) {
+                    Estudiante e = mejores[i];
+                    if (e == null) continue;
+
+                    double promedio = e.calcularPromedio();
+                    String strPromedio = (promedio == -1.0) ? "Pendiente (menos de 5 notas)" : String.format("%.2f", promedio);
+
+                    Paragraph pItem = new Paragraph();
+                    pItem.setLeading(16f);
+
+                    // Número de posición y Nombre Completo
+                    pItem.add(new Chunk((i + 1) + ". ", fontSeccion));
+                    pItem.add(new Chunk(e.getNombreCompleto(), fontBold));
+                    pItem.add(new Chunk(" (Doc. " + e.getDocumento() + ")\n", fontNormal));
+
+                    // Promedio obtenido
+                    pItem.add(new Chunk("    Promedio Académico: ", fontBold));
+                    pItem.add(new Chunk(strPromedio + "\n", fontNormal));
+
+                    pItem.setSpacingAfter(10);
+                    doc.add(pItem);
+                }
+            }
+
+            // 5. Pie de página
+            Paragraph pie = new Paragraph(
+                "Reporte de excelencia académica generado automáticamente por " + nombre + ".",
+                fontPie
+            );
+            pie.setSpacingBefore(15);
+            pie.setAlignment(Element.ALIGN_CENTER);
+            doc.add(pie);
+
+            doc.close();
+            return "Reporte de mejores estudiantes generado exitosamente.\n";
+
+        } catch (DocumentException | java.io.FileNotFoundException e) {
+            e.printStackTrace();
+            return "Error generando el reporte de mejores estudiantes.\n";
+        }
+    }
+
+    public String generarMejores10Texto() {
+        Estudiante[] mejores = mejores10();
+        if (mejores == null || mejores.length == 0) {
+            return "No hay estudiantes registrados en el sistema.\n";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("================================================\n");
+        sb.append("   MEJORES 10 ESTUDIANTES - ").append(nombre).append("\n");
+        sb.append("================================================\n\n");
+
+        boolean hayDatos = false;
+        for (int i = 0; i < mejores.length; i++) {
+            Estudiante e = mejores[i];
+            if (e != null) {
+                hayDatos = true;
+                double promedio = e.calcularPromedio();
+                String promTexto = (promedio == -1.0)
+                        ? "Pendiente (menos de 5 notas)"
+                        : String.format("%.2f", promedio);
+
+                sb.append(i + 1).append(". ")
+                  .append(e.getNombreCompleto())
+                  .append(" (Doc: ").append(e.getDocumento()).append(")")
+                  .append(" | Edad: ").append(e.calcularEdad()).append(" años")
+                  .append(" | Promedio: ").append(promTexto)
+                  .append("\n");
+            }
+        }
+
+        if (!hayDatos) {
+            return "No hay datos de estudiantes disponibles para mostrar.\n";
+        }
+        return sb.toString();
     }
 }

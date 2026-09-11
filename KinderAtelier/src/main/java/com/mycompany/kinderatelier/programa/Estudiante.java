@@ -19,6 +19,7 @@ public class Estudiante extends Persona {
     private String tipoSangre;
     private String alergias;
     private String habilidades;
+    private String talento;      /*deportivo, artistico, academico o social*/
     private String direccion;
     /*DATOS DEL ACUDIENTE*/
     private String nombreAcudiente;
@@ -42,6 +43,7 @@ public class Estudiante extends Persona {
         parentesco = dParentesco;
         telefonoAcudiente = dTelefonoAcudiente;
 
+        talento = "";   // se asigna despues con setTalento, para no cambiar el constructor
         notas = new ArrayList<>();
     }
     public ArrayList<Float> getNotas() {
@@ -85,6 +87,15 @@ public class Estudiante extends Persona {
     public String getHabilidades() {
         return habilidades;
     }
+    public String getTalento() {
+        return talento;
+    }
+    public void setTalento(String dTalento) {
+        talento = dTalento;
+    }
+    public boolean tieneTalento() {
+        return !talento.isEmpty();
+    }
     public String getNombreAcudiente() {
         return nombreAcudiente;
     }
@@ -126,6 +137,7 @@ public class Estudiante extends Persona {
         String datos;
         String textoAlergias;
         String textoHabilidades;
+        String textoTalento;
         if (alergias.isEmpty()) {
             textoAlergias = "ninguna reportada";
         } else {
@@ -135,6 +147,11 @@ public class Estudiante extends Persona {
             textoHabilidades = "sin registrar";
         } else {
             textoHabilidades = habilidades;
+        }
+        if (talento.isEmpty()) {
+            textoTalento = "sin identificar";
+        } else {
+            textoTalento = talento;
         }
         datos = """
                 ======= ESTUDIANTE =======
@@ -146,6 +163,7 @@ public class Estudiante extends Persona {
                 + "Tipo de sangre: " + tipoSangre + "\n"
                 + "Alergias: " + textoAlergias + "\n"
                 + "Habilidades: " + textoHabilidades + "\n"
+                + "Talento: " + textoTalento + "\n"
                 + "Direccion: " + direccion + "\n"
                 + "Telefono: " + telefono + "\n"
                 + "Acudiente: " + nombreAcudiente + " (" + parentesco + ")\n"
