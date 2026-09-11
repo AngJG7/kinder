@@ -15,15 +15,19 @@ public class Estudiante extends Persona {
     private String direccion;
     private String patologias;
 
-    private String nombreAcudiente;
-    private String documentoAcudiente;
-    private String parentesco;
-    private String telefonoAcudiente;
+    private String nombrePadre;
+    private String documentoPadre;
+    private String telefonoPadre;
+
+    private String nombreMadre;
+    private String documentoMadre;
+    private String telefonoMadre;
 
     private ArrayList<Float> notas;
 
     public Estudiante(String dDocumento, String dNombres, String dApellidos, String dTelefono, String dEps, String dFechaNacimiento, String dTipoSangre, String dAlergias,
-                      String dHabilidades, String dDireccion, String dNombreAcudiente, String dDocumentoAcudiente, String dParentesco, String dTelefonoAcudiente){
+                      String dHabilidades, String dDireccion, String dNombrePadre, String dDocumentoPadre, String dTelefonoPadre,
+                      String dNombreMadre, String dDocumentoMadre, String dTelefonoMadre){
         super(dDocumento, dNombres, dApellidos, dTelefono, dEps);
         fechaNacimiento = dFechaNacimiento;
         tipoSangre = dTipoSangre;
@@ -31,10 +35,13 @@ public class Estudiante extends Persona {
         habilidades = dHabilidades;
         direccion = dDireccion;
 
-        nombreAcudiente = dNombreAcudiente;
-        documentoAcudiente = dDocumentoAcudiente;
-        parentesco = dParentesco;
-        telefonoAcudiente = dTelefonoAcudiente;
+        nombrePadre = dNombrePadre;
+        documentoPadre = dDocumentoPadre;
+        telefonoPadre = dTelefonoPadre;
+
+        nombreMadre = dNombreMadre;
+        documentoMadre = dDocumentoMadre;
+        telefonoMadre = dTelefonoMadre;
 
         talento = "";
         patologias = "";
@@ -100,17 +107,23 @@ public class Estudiante extends Persona {
     public boolean requierePatologias() {
         return calcularEdad() < 3;
     }
-    public String getNombreAcudiente() {
-        return nombreAcudiente;
+    public String getNombrePadre() {
+        return nombrePadre;
     }
-    public String getParentesco() {
-        return parentesco;
+    public String getDocumentoPadre() {
+        return documentoPadre;
     }
-    public String getTelefonoAcudiente() {
-        return telefonoAcudiente;
+    public String getTelefonoPadre() {
+        return telefonoPadre;
     }
-    public String getDocumentoAcudiente() {
-        return documentoAcudiente;
+    public String getNombreMadre() {
+        return nombreMadre;
+    }
+    public String getDocumentoMadre() {
+        return documentoMadre;
+    }
+    public String getTelefonoMadre() {
+        return telefonoMadre;
     }
     public String getAlergias(){
         return alergias;
@@ -128,12 +141,16 @@ public class Estudiante extends Persona {
     public String mostrarAcudiente() {
         String datos;
         datos = """
-                ======= ACUDIENTE RESPONSABLE ======
+                ======= ACUDIENTES RESPONSABLES ======
                 Estudiante: """ + getNombreCompleto() + " (doc. " + documento + ")\n"
-                + "Acudiente: " + nombreAcudiente + "\n"
-                + "Documento: " + documentoAcudiente + "\n"
-                + "Parentesco: " + parentesco + "\n"
-                + "Telefono: " + telefonoAcudiente + "\n";
+                + "--- Datos del Padre ---\n"
+                + "Nombre: " + nombrePadre + "\n"
+                + "Documento: " + documentoPadre + "\n"
+                + "Telefono: " + telefonoPadre + "\n"
+                + "--- Datos de la Madre ---\n"
+                + "Nombre: " + nombreMadre + "\n"
+                + "Documento: " + documentoMadre + "\n"
+                + "Telefono: " + telefonoMadre + "\n";
         return datos;
     }
 
@@ -170,8 +187,8 @@ public class Estudiante extends Persona {
                 + "Talento: " + textoTalento + "\n"
                 + "Direccion: " + direccion + "\n"
                 + "Telefono: " + telefono + "\n"
-                + "Acudiente: " + nombreAcudiente + " (" + parentesco + ")\n"
-                + "Tel. acudiente: " + telefonoAcudiente + "\n";
+                + "Padre: " + nombrePadre + " (Tel. " + telefonoPadre + ")\n"
+                + "Madre: " + nombreMadre + " (Tel. " + telefonoMadre + ")\n";
         if (requierePatologias()) {
             String textoPatologias = patologias.isEmpty()
                     ? "sin registrar" : patologias;
@@ -180,4 +197,3 @@ public class Estudiante extends Persona {
         return datos;
     }
 }
-

@@ -137,10 +137,12 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         String alergias;
         String habilidades;
         String direccion;
-        String nombreAcudiente;
-        String documentoAcudiente;
-        String parentesco;
-        String telefonoAcudiente;
+        String nombrePadre;
+        String documentoPadre;
+        String telefonoPadre;
+        String nombreMadre;
+        String documentoMadre;
+        String telefonoMadre;
 
         documento = Lector.leerTexto("Documento del estudiante:");
         if (documento.isEmpty()) {
@@ -160,15 +162,17 @@ public class VentanaEstudiantes extends javax.swing.JFrame {
         alergias = Lector.leerTexto("Alergias (deje vacio si no tiene):");
         habilidades = Lector.leerTexto("Habilidades que muestra el nino:");
         direccion = Lector.leerTexto("Direccion:");
-        nombreAcudiente = Lector.leerTexto("Nombre del acudiente:");
-        documentoAcudiente = Lector.leerTexto("Documento del acudiente:");
-        parentesco = Lector.leerTexto("Parentesco (Madre, Padre, etc.):");
-        telefonoAcudiente = Lector.leerTexto("Telefono del acudiente:");
+        nombrePadre = Lector.leerTexto("Nombre del padre:");
+        documentoPadre = Lector.leerTexto("Documento del padre:");
+        telefonoPadre = Lector.leerTexto("Telefono del padre:");
+        nombreMadre = Lector.leerTexto("Nombre de la madre:");
+        documentoMadre = Lector.leerTexto("Documento de la madre:");
+        telefonoMadre = Lector.leerTexto("Telefono de la madre:");
 
         nuevo = new Estudiante(documento, nombres, apellidos, telefono, eps,
                 fechaNacimiento, tipoSangre, alergias, habilidades, direccion,
-                nombreAcudiente, documentoAcudiente, parentesco,
-                telefonoAcudiente);
+                nombrePadre, documentoPadre, telefonoPadre,
+                nombreMadre, documentoMadre, telefonoMadre);
 
         if (kinder.agregarEstudiante(nuevo)) {
             Lector.mostrar("Estudiante registrado:\n\n" + nuevo.mostrarDatos());

@@ -662,20 +662,24 @@ public class KinderAtelier {
             pEstudiante.setSpacingAfter(15);
             doc.add(pEstudiante);
 
-            Paragraph pSecFamilia = new Paragraph("GRUPO FAMILIAR - ACUDIENTE RESPONSABLE", fontSeccion);
+            Paragraph pSecFamilia = new Paragraph("GRUPO FAMILIAR - ACUDIENTES RESPONSABLES", fontSeccion);
             pSecFamilia.setSpacingAfter(6);
             doc.add(pSecFamilia);
 
             Paragraph pFamilia = new Paragraph();
             pFamilia.setLeading(16f);
-            pFamilia.add(new Chunk("Nombre: ", fontBold));
-            pFamilia.add(new Chunk(estudiante.getNombreAcudiente() + "\n", fontNormal));
-            pFamilia.add(new Chunk("Parentesco: ", fontBold));
-            pFamilia.add(new Chunk(estudiante.getParentesco() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Padre: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getNombrePadre() + "\n", fontNormal));
             pFamilia.add(new Chunk("Documento: ", fontBold));
-            pFamilia.add(new Chunk(estudiante.getDocumentoAcudiente() + "\n", fontNormal));
+            pFamilia.add(new Chunk(estudiante.getDocumentoPadre() + "\n", fontNormal));
             pFamilia.add(new Chunk("Telefono: ", fontBold));
-            pFamilia.add(new Chunk(estudiante.getTelefonoAcudiente() + "\n", fontNormal));
+            pFamilia.add(new Chunk(estudiante.getTelefonoPadre() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Madre: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getNombreMadre() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Documento: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getDocumentoMadre() + "\n", fontNormal));
+            pFamilia.add(new Chunk("Telefono: ", fontBold));
+            pFamilia.add(new Chunk(estudiante.getTelefonoMadre() + "\n", fontNormal));
             pFamilia.setSpacingAfter(15);
             doc.add(pFamilia);
 
