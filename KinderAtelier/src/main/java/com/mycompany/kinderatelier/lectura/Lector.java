@@ -155,6 +155,10 @@ public class Lector {
                 String nombreResponsable = datos[1];
                 double salario = Double.parseDouble(datos[2].replace(",", "."));
 
+                if (yaExiste(aspirantes, contador, identificacion)) {
+                    continue; // Evita duplicar si ya fue cargado previamente
+                }
+
                 aspirantes[contador] = new Aspirante(nombreResponsable, identificacion, salario);
                 contador++; // Incrementa sobre el contador existente
             }
@@ -165,5 +169,14 @@ public class Lector {
         }
 
         return contador; // Mantiene el conteo acumulado (RAM previo + CSV)
+    }
+
+    private static boolean yaExiste(Aspirante[] aspirantes, int contador, String identificacion) {
+        for (int i = 0; i < contador; i++) {
+            if (aspirantes[i] != null && aspirantes[i].getIdentificacion().equals(identificacion)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
