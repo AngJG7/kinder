@@ -19,6 +19,7 @@ public class VentanaAspirantes extends javax.swing.JFrame {
     public VentanaAspirantes(KinderAtelier dKinder) {
         initComponents();
         kinder = dKinder;
+        kinder.setCantidadAspirantes(Lector.cargarCsv(kinder.getAspirantes(), kinder.getCantidadAspirantes()));
     }
 
     /**
@@ -31,7 +32,6 @@ public class VentanaAspirantes extends javax.swing.JFrame {
     private void initComponents() {
 
         registrarAspiranteBtn = new javax.swing.JButton();
-        cargarAspirantesCsvBtn = new javax.swing.JButton();
         guardarAspirantesCsvBtn = new javax.swing.JButton();
         generarTablaAspirantesBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -40,9 +40,6 @@ public class VentanaAspirantes extends javax.swing.JFrame {
 
         registrarAspiranteBtn.setText("Registrar aspirante");
         registrarAspiranteBtn.addActionListener(this::registrarAspiranteBtnActionPerformed);
-
-        cargarAspirantesCsvBtn.setText("Cargar aspirantes (CSV)");
-        cargarAspirantesCsvBtn.addActionListener(this::cargarAspirantesCsvBtnActionPerformed);
 
         guardarAspirantesCsvBtn.setText("Guardar aspirantes (CSV)");
         guardarAspirantesCsvBtn.addActionListener(this::guardarAspirantesCsvBtnActionPerformed);
@@ -59,20 +56,18 @@ public class VentanaAspirantes extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 22, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(guardarAspirantesCsvBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(generarTablaAspirantesBtn)
-                        .addGap(41, 41, 41))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(registrarAspiranteBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cargarAspirantesCsvBtn)
-                        .addGap(30, 30, 30))))
+                .addComponent(guardarAspirantesCsvBtn)
+                .addGap(18, 18, 18)
+                .addComponent(generarTablaAspirantesBtn)
+                .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(131, 131, 131)
+                        .addComponent(registrarAspiranteBtn)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -81,9 +76,7 @@ public class VentanaAspirantes extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(registrarAspiranteBtn)
-                    .addComponent(cargarAspirantesCsvBtn))
+                .addComponent(registrarAspiranteBtn)
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(generarTablaAspirantesBtn)
@@ -97,10 +90,6 @@ public class VentanaAspirantes extends javax.swing.JFrame {
     private void registrarAspiranteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarAspiranteBtnActionPerformed
         kinder.registrarAspirante();
     }//GEN-LAST:event_registrarAspiranteBtnActionPerformed
-
-    private void cargarAspirantesCsvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarAspirantesCsvBtnActionPerformed
-        kinder.setCantidadAspirantes(Lector.cargarCsv(kinder.getAspirantes(), kinder.getCantidadAspirantes()));
-    }//GEN-LAST:event_cargarAspirantesCsvBtnActionPerformed
 
     private void guardarAspirantesCsvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarAspirantesCsvBtnActionPerformed
         Lector.guardarCsv(kinder.getAspirantes(), kinder.getCantidadAspirantes());
@@ -126,7 +115,6 @@ public class VentanaAspirantes extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cargarAspirantesCsvBtn;
     private javax.swing.JButton generarTablaAspirantesBtn;
     private javax.swing.JButton guardarAspirantesCsvBtn;
     private javax.swing.JLabel jLabel1;
